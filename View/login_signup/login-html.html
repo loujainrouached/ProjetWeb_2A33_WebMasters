@@ -1,0 +1,97 @@
+<?php
+include "../Controller/EmployeC.php";
+
+$user1 = new UserC();
+$tab = $user1->listeEmploye();
+if (isset($_GET['action']) && $_GET['action'] == 'supp' && isset($_GET['id_user'])) {
+    $user1->deleteuser($_GET['id_user']);
+    header("Location: " . strtok($_SERVER["PHP_SELF"], '?'));
+    exit;
+}
+
+?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="login-wrap.css">
+</head>
+<body>
+    <br>
+    <br>
+    <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Connexion</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Inscription</label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <div class="group">
+                        <label for="email_user" class="label">Adresse Email</label>
+                        <input id="pass" type="text" class="input" name="email_user">
+                    </div>
+                    <div class="group">
+                        <label for="mdp" class="label">mot de passe</label>
+                        <input id="mdp" type="password" class="input" data-type="password" name="mdp">
+                    </div>
+                    <div class="group">
+                        <input id="check" type="checkbox" class="check" checked>
+                        <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                    </div>
+                    <div class="group">
+                        <input type="submit" class="button" value="Connexion">
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <a href="#forgot">Mot de passe oubliè?</a>
+                    </div>
+                </div>
+
+
+                
+                <div class="sign-up-htm">
+                    <div class="group">
+                        <label for="photo_user" class="label">Photo de l'utilisateur</label>
+                        <input type="file" id="photo_user" name="photo_user" accept="image/*" class="input">
+                        </div>
+                       
+                    <div class="group">
+                        <label for="nom_user" class="label">Nom</label>
+                        <input id="nom_user" type="text" name="nom_user" class="input">
+                        </div>
+                    <div class="group">
+                        <label for="prenom_user" class="label">Prénom</label>
+                        <input id="prenom_user" type="text" name="prenom_user" class="input">
+                      
+                    </div>
+   
+                    <div class="group">
+                        <label for="mdp" class="label">mot de passe</label>
+                        <input id="mdp" type="password" class="input" data-type="password" name="mdp">
+                    </div>
+                    <div class="group">
+                        <label for="confirm_mdp" class="label">confirmer mot de passe</label>
+                        <input id="confirm_mdp" type="password" class="input" data-type="password" name="confirm_mdp">
+                    </div>
+                  
+                    <div class="group">
+                        <label for="email_user" class="label">Adresse Email</label>
+                        <input id="pass" type="text" class="input" name="email_user">
+                    </div>
+                    <div class="group">
+                        <input type="submit" class="button" value="s'inscrire ">
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <label for="tab-1">vous etes un membre?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
