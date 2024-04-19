@@ -116,6 +116,15 @@ if (!preg_match($emailRegExp, $Email)) {
             margin-bottom: 20px;
             font-size: 18px; /* Increased font size */
         }
+        input[type="number"],
+        textarea {
+            border: 1px solid orange;
+            padding: 15px;
+            width: calc(100% - 32px); /* Adjusted width to accommodate borders */
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            font-size: 18px; /* Increased font size */
+        }
 
 
 

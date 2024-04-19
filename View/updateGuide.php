@@ -41,7 +41,36 @@ if (
           
             
         );
+        $Nom= $_POST['Nom'];
+        $nomRegExp = "/^[A-Za-z]+$/"; // Expression régulière pour vérifier que le nom et le prénom ne contiennent que des lettres
+       
 
+        // Vérifier le nom
+        if (!preg_match($nomRegExp, $Nom)) {
+            echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Nom  !!!!</div>';
+            die(); // Arrête l'exécution du script après l'affichage du message
+            //die(" verifier le Nom !!!! ");
+        }
+        $Prenom= $_POST["Prenom"];
+        $nomRegExp = "/^[A-Za-z]+$/"; // Expression régulière pour vérifier que le nom et le prénom ne contiennent que des lettres
+       
+
+        // Vérifier le Prenom
+        if (!preg_match($nomRegExp, $Prenom)) {
+            echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Prenom !!!!</div>';
+            die(); // Arrête l'exécution du script après l'affichage du message
+            // die(" verifier le Nom  !!!! ");
+        }
+       
+
+$Email = $_POST['Email'];
+$emailRegExp = "/^[^\s@]+@[^\s@]+\.[^\s@]+$/"; // Regular expression to check the email format
+
+// Validate the email
+if (!preg_match($emailRegExp, $Email)) {
+    echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Email !!!!</div>';
+    die();
+}
        
         $guidec->updateGuide($guides,$ID_guide);
         echo"guide information updated successfully";
@@ -87,6 +116,15 @@ if (
 
         /* Orange color for input fields */
         input[type="text"],
+        textarea {
+            border: 1px solid orange;
+            padding: 15px;
+            width: calc(100% - 32px); /* Adjusted width to accommodate borders */
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            font-size: 18px; /* Increased font size */
+        }
+        input[type="number"],
         textarea {
             border: 1px solid orange;
             padding: 15px;
@@ -167,14 +205,14 @@ if (
             <tr>
                 <td><label for="Age">Age :</label></td>
                 <td>
-                    <input type="text" id="Age" name="Age" />
+                    <input type="number" id="Age" name="Age" />
                     <span id="erreurAge" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="numTel">numTel :</label></td>
                 <td>
-                    <input type="text" id="numTel" name="numTel" />
+                    <input type="number" id="numTel" name="numTel" />
                     <span id="erreurtitre" style="color: red"></span>
                 </td>
             </tr>
@@ -188,7 +226,7 @@ if (
             <tr>
                 <td><label for="nbvoyages">nbvoyages :</label></td>
                 <td>
-                    <input type="text" id="nbvoyages" name="nbvoyages" />
+                    <input type="number" id="nbvoyages" name="nbvoyages" />
                     <span id="erreurnbvoyages" style="color: red"></span>
                 </td>
             </tr>
@@ -208,7 +246,7 @@ if (
     </form>
     <script>
         
-  const nameInput = document.getElementById("Nom");
+/*  const nameInput = document.getElementById("Nom");
 const nameError = document.getElementById("erreurNom");
 
 nameInput.addEventListener("input", function () {
@@ -220,7 +258,76 @@ nameInput.addEventListener("input", function () {
     nameError.style.display = "none"; // Hide the error message
   }
 });
+     // Get the textarea element
+     const textarea = document.getElementById('Nom');
 
+// Add an input event listener to the textarea
+textarea.addEventListener('input', function(event) {
+  // Get the current textarea value
+  const value = event.target.value;
+  
+  // Remove any numbers from the textarea value
+  const newValue = value.replace(/\d/g, '');
+  
+  // Update the textarea value with the filtered value
+  event.target.value = newValue;
+});
+// Get the textarea element
+const textarea = document.getElementById('Prenom');
+
+// Add an input event listener to the textarea
+textarea.addEventListener('input', function(event) {
+  // Get the current textarea value
+  const value = event.target.value;
+  
+  // Remove any numbers from the textarea value
+  const newValue = value.replace(/\d/g, '');
+  
+  // Update the textarea value with the filtered value
+  event.target.value = newValue;
+});*/
+// Get the textarea element
+const textarea = document.getElementById('Age');
+
+// Add an input event listener to the textarea
+textarea.addEventListener('input', function(event) {
+  // Get the current textarea value
+  const value = event.target.value;
+  
+  // Remove any non-numeric characters from the textarea value
+  const newValue = value.replace(/\D/g, '');
+  
+  // Update the textarea value with the filtered value
+  event.target.value = newValue;
+});
+// Get the textarea element
+const textarea = document.getElementById('numTel');
+
+// Add an input event listener to the textarea
+textarea.addEventListener('input', function(event) {
+  // Get the current textarea value
+  const value = event.target.value;
+  
+  // Remove any non-numeric characters from the textarea value
+  const newValue = value.replace(/\D/g, '');
+  
+  // Update the textarea value with the filtered value
+  event.target.value = newValue;
+});
+// Get the textarea element
+const textarea = document.getElementById('nbvoyages');
+
+// Add an input event listener to the textarea
+textarea.addEventListener('input', function(event) {
+  // Get the current textarea value
+  const value = event.target.value;
+  
+  // Remove any non-numeric characters from the textarea value
+  const newValue = value.replace(/\D/g, '');
+  
+  // Update the textarea value with the filtered value
+  event.target.value = newValue;
+});
 </script>
 </body>
 
