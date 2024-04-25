@@ -1,14 +1,10 @@
 <?php
-include "../Controller/VoyageC.php";
+include "../Controller/ReservationC.php";
 
-$voyage = new VoyageC();
-$tab = $voyage->listeVoyage();
+$reservation = new ReservationC();
+$tab = $reservation->listeReservation();
 
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
-    $voyage->deleteVoyage($_GET['id']);
-       exit;
 
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,9 +81,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                     <a href="index1.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
                        
-                    <a href="element.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Voyage</a>
+                    <a href="voyage_back.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Voyage</a>
+                    <a href="reservation_back.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Reservation</a>
                      
-                        
                 </div>
             </nav>
         </div>
@@ -173,7 +169,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex">LOODY</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -197,53 +193,29 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
    
   </nav>
 
-  <div class="container">
-   <?php
-    if (isset($_GET["msg"])) {
-      $msg = $_GET["msg"];
-      echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-      ' . $msg . '
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>';
-    }
-    ?>
-    <a href="add-new.php" class="btn btn-dark mb-3">Add New</a>
 
     <table class="table table-hover text-center">
       <thead class="table-dark">
         <tr>
           <th scope="col">ID</th>
-          <th scope="col"> type</th>
-          <th scope="col"> destination</th>
-          <th scope="col">dateDepart</th>
-          <th scope="col">dateRetour</th>
-          <th scope="col">image</th>
-          <th scope="col">action</th>
+          <th scope="col"> Id_voyage</th>
+          <th scope="col"> Date</th>
+          <th scope="col">Nombre de personne</th>
+          <th scope="col">Numero tel</th>
+          
         </tr>
       </thead>
       <tbody>
       <?php
-    foreach ($tab as $Voyage){
+    foreach ($tab as $Reservation){
     ?>
        <tr>
-         <td><?php echo $Voyage["id"] ?></td>
-         <td><?php echo $Voyage["type"] ?></td>
-         <td><?php echo $Voyage["destination"] ?></td>
-         <td><?php echo $Voyage["dateDepart"] ?></td>
-         <td><?php echo $Voyage["dateRetour"] ?></td>
-         <td><img src="<?php echo $Voyage['image']; ?>" width="200px" height="70px"></td>
-
-        
-        
-         <td>
-              <a href="edit.php?id=<?php echo $Voyage["id"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
-           
-              <a href="?action=delete&id=<?= $Voyage['id'] ?>" onclick="return confirm('Are you sure you want to delete this record?');" class="link-dark">
-    <i class="fa-solid fa-trash fs-5"></i>
-                </a>
-
-
-            </td>
+         <td><?php echo $Reservation["id"] ?></td>
+         <td><?php echo $Reservation["id_voyage"] ?></td>
+         <td><?php echo $Reservation["date_reservation"] ?></td>
+         <td><?php echo $Reservation["nombre_personnes"] ?></td>
+         <td><?php echo $Reservation["numero_personne"] ?></td>
+         
           </tr>
         <?php
         }

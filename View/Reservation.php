@@ -1,12 +1,29 @@
 <?php
-include "../Controller/VoyageC.php";
 
+include '../Controller/ReservationC.php'; // Inclure le contrôleur de réservation
+include '../Model/Reservation.php'; // Inclure le modèle de réservation
 
-$voyage = new VoyageC();
-$tab = $voyage->listeVoyage();
+$reservationC = new ReservationC(); // Créer une instance du contrôleur de réservation
 
+// Vérifier si les données du formulaire sont définies
+if (
+    isset($_POST['id_voyage']) &&
+    isset($_POST['date_reservation']) &&
+    isset($_POST['nombre_personnes']) &&
+    isset($_POST['numero_personne'])
+) {
+    // Créer une nouvelle instance de réservation en récupérant les données du formulaire
+    $reservation = new Reservation(
+        null,
+        $_POST['id_voyage'],
+        $_POST['date_reservation'],
+        $_POST['nombre_personnes'],
+        $_POST['numero_personne']
+    );
 
-
+    // Ajouter la réservation
+    $reservationC->ajouterReservation($reservation);
+}
 
 ?>
 
@@ -51,8 +68,10 @@ $tab = $voyage->listeVoyage();
         </div>
         <!-- Spinner End -->
 
-        <!-- Topbar Start -->
-        <div class="container-fluid bg-primary px-5 d-none d-lg-block">
+       
+        
+  <!-- Topbar Start -->
+  <div class="container-fluid bg-primary px-5 d-none d-lg-block">
             <div class="row gx-0">
                 <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                     <div class="d-inline-flex align-items-center" style="height: 45px;">
@@ -83,8 +102,9 @@ $tab = $voyage->listeVoyage();
         </div>
         <!-- Topbar End -->
 
-              <!-- Navbar & Hero Start -->
-              <div class="container-fluid position-relative p-0">
+       
+       <!-- Navbar & Hero Start -->
+       <div class="container-fluid position-relative p-0">
                 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
                     <a href="" class="navbar-brand p-0">
                         <h1 class="m-0"><img src="tayara.png" alt="VieXplore Logo" class="me-3">VieXplore</h1>
@@ -109,107 +129,74 @@ $tab = $voyage->listeVoyage();
         </div>
         <!-- Navbar & Hero End -->
 
+
         <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">
             <div class="container text-center py-5" style="max-width: 900px;">
-                <h3 class="text-white display-3 mb-4">Travel Destination</h1>
+                <h3 class="text-white display-3 mb-4">Online Booking</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active text-white">Destination</li>
+                    <li class="breadcrumb-item active text-white">Online Booking</li>
                 </ol>    
             </div>
         </div>
         <!-- Header End -->
 
-        <!-- Destination Start -->
-        <div class="container-fluid destination py-5">
+        <!-- Tour Booking Start -->
+        <div class="container-fluid booking py-5">
             <div class="container py-5">
-                <div class="mx-auto text-center mb-5" style="max-width: 900px;">
-                    <h5 class="section-title px-3">Destination</h5>
-                    <h1 class="mb-0">Popular Destination</h1>
-                </div>
-                <div class="tab-class text-center">
-                    <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
-                        <li class="nav-item">
-                            <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
-                                <span class="text-dark" style="width: 150px;">All</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex py-2 mx-3 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                                <span class="text-dark" style="width: 150px;">USA</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
-                                <span class="text-dark" style="width: 150px;">Canada</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
-                                <span class="text-dark" style="width: 150px;">Europe</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-5">
-                                <span class="text-dark" style="width: 150px;">China</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-6">
-                                <span class="text-dark" style="width: 150px;">Singapore</span>
-                            </a>
-                        </li>
-                    </ul>
-              
-                      </div>    
-                       
-                    
-        </div>
-        <!-- Destination End -->
-        <div class="container">
-  <div class="row">
-    <?php
-    // Chemin du dossier contenant les images
-    $directory = 'upload/';
-
-    // Ouvrir le dossier
-    if ($handle = opendir($directory)) {
-        // Parcourir le dossier
-        while (false !== ($file = readdir($handle))) {
-            // Vérifier si le fichier est une image (vous pouvez ajouter d'autres formats si nécessaire)
-            if (in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif'])) {
-                ?>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <!-- Affichage de l'image avec le chemin relatif -->
-                        <img src="<?php echo $directory . $file; ?>" class="card-img-top" alt="Image du Voyage">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <h5 class="section-booking-title pe-3">Booking</h5>
+                        <h1 class="text-white mb-4">Online Booking</h1>
+                        <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur maxime ullam esse fuga blanditiis accusantium pariatur quis sapiente, veniam doloribus praesentium? Repudiandae iste voluptatem fugiat doloribus quasi quo iure officia.
+                        </p>
+                        <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur maxime ullam esse fuga blanditiis accusantium pariatur quis sapiente, veniam doloribus praesentium? Repudiandae iste voluptatem fugiat doloribus quasi quo iure officia.
+                        </p>
+                        <a href="#" class="btn btn-light text-primary rounded-pill py-3 px-5 mt-2">Read More</a>
                     </div>
-                </div>
-                <?php
-            }
-        }
-        // Fermer le dossier
-        closedir($handle);
-    }
-    ?>
-  </div>
-</div>
+                    <div class="col-lg-6">
+                        <h1 class="text-white mb-3">Book A Tour Deals</h1>
+                        <form action="" method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-white border-0" id="id_voyage" name="id_voyage" placeholder="travel">
+                                        <label for="id_voyage">ID Voyage:</label>
+                                    </div>
+                                </div>
 
-        <!-- Subscribe Start -->         
-        <div class="container-fluid subscribe py-5">
-            <div class="container text-center py-5">
-                <div class="mx-auto text-center" style="max-width: 900px;">
-                   
-                    <div class="position-relative mx-auto">
-                        
+                                <input type="hidden" id="date_reservation" name="date_reservation" value="<?php echo date('Y-m-d'); ?>">
+                               
+                                <div class="col-md-6">
+                                
+                                    <div class="form-floating date" id="date3" data-target-input="nearest">
+                                
+                                <input type="number" class="form-control bg-white border-0" id="nombre_personnes"  name="nombre_personnes" placeholder="nombre_personnes" />
+                                        <label for="nombre_personnes">Nombre de Personnes:</label>
+            
+                                    </div>
+                                </div>
+                                <center>
+                                <div class="col-md-6">
+                                    <div class="form-floating date" id="date3" data-target-input="nearest">
+                                        <input type="text" class="form-control bg-white border-0" id="numero_personne"  name="numero_personne" placeholder="numero_personne" />
+                                        <label for="numero_personne">Numero de Personnes:</label>
+                                        <br>
+            
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary text-white w-100 py-3" type="submit">Reserver</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Subscribe End -->
+        <!-- Tour Booking End -->
 
+       
         <!-- Footer Start -->
         <div class="container-fluid footer py-5">
             <div class="container py-5">

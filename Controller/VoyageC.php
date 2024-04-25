@@ -45,24 +45,23 @@ echo 'Error: ' . $e->getMessage();
     
 public function updateVoyage($id, $type, $destination, $dateDepart, $dateRetour, $image)
 {
-    $db = config::getConnexion(); // Obtenez une instance de la connexion à la base de données
-
-    // Préparez la requête SQL pour mettre à jour le voyage avec ou sans l'image
+    $db = config::getConnexion(); 
+    
     $sql = "UPDATE voyage SET type = :type, destination = :destination, dateDepart = :dateDepart, dateRetour = :dateRetour, image = CASE WHEN :image IS NOT NULL THEN :image ELSE image END WHERE id = :id";
 
-    // Préparez la requête SQL
-    $stmt = $db->prepare($sql);
+   
+    $query = $db->prepare($sql);
 
     // Liez les paramètres
-    $stmt->bindParam(':type', $type);
-    $stmt->bindParam(':destination', $destination);
-    $stmt->bindParam(':dateDepart', $dateDepart);
-    $stmt->bindParam(':dateRetour', $dateRetour);
-    $stmt->bindParam(':id', $id);
-    $stmt->bindParam(':image', $image, PDO::PARAM_STR); // Assurez-vous que :image est lié en tant que chaîne de caractères
+    $query->bindParam(':type', $type);
+    $query->bindParam(':destination', $destination);
+    $query->bindParam(':dateDepart', $dateDepart);
+    $query->bindParam(':dateRetour', $dateRetour);
+    $query->bindParam(':id', $id);
+    $query->bindParam(':image', $image, PDO::PARAM_STR); // Assurez-vous que :image est lié en tant que chaîne de caractères
 
     // Exécutez la requête SQL
-    return $stmt->execute();
+    return $query->execute();
 }
 
 

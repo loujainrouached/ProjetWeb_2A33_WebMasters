@@ -16,12 +16,6 @@ if (isset($_POST["submit"])) {
         $targetDir = "upload/";
         $targetFile = $targetDir . basename($_FILES['new_image']['name']);
 
-        // Assurez-vous que c'est une vraie image
-        $check = getimagesize($_FILES['new_image']['tmp_name']);
-        if ($check === false) {
-            echo "Le fichier n'est pas une image.";
-            exit;
-        }
 
         // Déplacer le fichier téléchargé vers le dossier cible
         if (!move_uploaded_file($_FILES['new_image']['tmp_name'], $targetFile)) {
@@ -45,7 +39,7 @@ if (isset($_POST["submit"])) {
 
 $db = config::getConnexion();
     // Prépare la requête SQL avec un paramètre de placeholder (:id)
-    $sql = "SELECT * FROM Voyage WHERE id = :id LIMIT 1";
+    $sql = "SELECT * FROM Voyage WHERE id = :id ";
     $query = $db->prepare($sql);
     
     // Lie le paramètre :id à la valeur de $id
@@ -92,17 +86,21 @@ $db = config::getConnexion();
 
    
     <div class="container d-flex justify-content-center">
-    <form method="post" enctype="multipart/form-data" style="width:50vw; min-width:300px;">
+    <form method="post" enctype="multipart/form-data" style="width:50vw; min-width:300px;" id="form">
 
         <div class="row mb-3">
           <div class="col">
             <label class="form-label">Type</label>
-            <input type="text" class="form-control" name="type" value="<?php echo $row['type'] ?>">
+            <input type="text" class="form-control" name="type" id="type" value="<?php echo $row['type'] ?>">
+            <label id="typeerror" style="color: red;"></label>
+            <label id="typecorrect" style="color: green;"></label>
           </div>
 
           <div class="col">
             <label class="form-label">Destination</label>
-            <input type="text" class="form-control" name="destination" value="<?php echo $row['destination'] ?>">
+            <input type="text" class="form-control" name="destination" id="destination" value="<?php echo $row['destination'] ?>">
+            <label id="destinationerror" style="color: red;"></label>
+   <label id="destinationcorrect" style="color: green;"></label>
           </div>
         </div>
 
@@ -118,7 +116,9 @@ $db = config::getConnexion();
 
         <div class="mb-3">
         <label class="form-label">Image:</label>
-        <input type="file" id="new_image" name="new_image" accept="image/*" class="form-control" value="<?php echo $row['image'] ?>">
+   <input type="file" id="new_image" name="new_image" accept="image/*" class="form-control" id="image" value="<?php echo $row['image'] ?>">
+   <label id="imageError" style="color: red;"></label>
+   <label id="imageCorrect" style="color: green;"></label>
     </div>
         
        
@@ -128,8 +128,19 @@ $db = config::getConnexion();
           <a href="element.php" class="btn btn-danger">Cancel</a>
         </div>
       </form>
+
+
+
+      
     </div>
   </div>
+
+  
+
+
+
+
+
 
   <!-- Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
