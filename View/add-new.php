@@ -117,78 +117,74 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" &&
         
     <div>
                <button type="submit" class="btn btn-success" name="submit">Save</button>
-               <a href="element.php" class="btn btn-danger">Cancel</a>
+               <a href="voyage_back.php" class="btn btn-danger">Cancel</a>
             </div>
       </form>
 
 
 
-      <script>
-    document.getElementById("form").addEventListener("submit", function(e)
-     {
-      e.preventDefault();
-   
-      var type = document.getElementById("type").value;
-      var typeerror = document.getElementById("typeerror");
-      var typecorrect = document.getElementById("typecorrect");
-
-
-      
-   
-      typecorrect.textContent = '';
-      typeerror.textContent = '';
-      
-
-      if (type !== "bateau" && type !== "vol") {
-        typeerror.textContent = "Le type doit être 'bateau' ou 'vol'.";
-    } else {
-        typecorrect.textContent = "Correct.";
-    }
- // Validation de l'image
- var image = document.getElementById("image");
-var imageError = document.getElementById("imageError");
-var imageCorrect = document.getElementById("imageCorrect");
-
-imageCorrect.textContent = '';
-imageError.textContent = '';
-
-var fileName = image.value;
-var fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-if (fileName && (fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png')) {
-    imageCorrect.textContent = "Correct.";
-} else {
-    imageError.textContent = "Le format de l'image doit être JPEG ou PNG.";
-}   
-
-var destination = document.getElementById("destination").value;
-      var destinationerror = document.getElementById("destinationerror");
-      var destinationcorrect = document.getElementById("destinationcorrect");
-
-
-      
-   
-      destinationcorrect.textContent = '';
-      destinationerror.textContent = '';
-      
-      
-if (destination === "") {
-    destinationerror.textContent = "La destination ne doit pas être vide.";
-} else {
-    destinationcorrect.textContent = "Correct.";
-}
-
-
-
-      
-
-      
-    });
-  </script>
+    
     </div>
    <!-- Bootstrap -->
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+   <script>
+    document.getElementById("form").addEventListener("submit", function(e) {
+    var hasError = false; // Variable pour suivre si une validation a échoué
 
+    var type = document.getElementById("type").value;
+    var typeerror = document.getElementById("typeerror");
+    var typecorrect = document.getElementById("typecorrect");
+
+    typecorrect.textContent = '';
+    typeerror.textContent = '';
+
+    if (type !== "bateau" && type !== "vol") {
+        typeerror.textContent = "Le type doit être 'bateau' ou 'vol'.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    } else {
+        typecorrect.textContent = "Correct.";
+    }
+
+    // Validation de l'image
+    var image = document.getElementById("image");
+    var imageError = document.getElementById("imageError");
+    var imageCorrect = document.getElementById("imageCorrect");
+
+    imageCorrect.textContent = '';
+    imageError.textContent = '';
+
+    var fileName = image.value;
+    var fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+    if (fileName && (fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png')) {
+        imageCorrect.textContent = "Correct.";
+    } else {
+        imageError.textContent = "Le format de l'image doit être JPEG ou PNG.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    }   
+
+    var destination = document.getElementById("destination").value;
+    var destinationerror = document.getElementById("destinationerror");
+    var destinationcorrect = document.getElementById("destinationcorrect");
+
+    destinationcorrect.textContent = '';
+    destinationerror.textContent = '';
+
+    if (destination === "") {
+        destinationerror.textContent = "La destination ne doit pas être vide.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    } else {
+        destinationcorrect.textContent = "Correct.";
+    }
+
+    // Empêcher la soumission du formulaire si une validation a échoué
+    if (hasError) {
+        e.preventDefault();
+    }
+});
+  </script>
 </body>
+
+
 
 </html>
 

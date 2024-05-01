@@ -79,11 +79,17 @@ $tab = $reservation->listeReservation();
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="index1.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    
+            
                     <div class="nav-item dropdown">
-                       
-                    <a href="voyage_back.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Voyage</a>
-                    <a href="reservation_back.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Reservation</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Voyage</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="voyage_back.php" class="dropdown-item">liste voyage</a>
+                            <a href="reservation_back.php" class="dropdown-item">liste reservation</a>
+                            </div>
+                            </div>
                      
+                        
                 </div>
             </nav>
         </div>

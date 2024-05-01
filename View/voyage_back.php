@@ -1,6 +1,7 @@
 <?php
 include "../Controller/VoyageC.php";
 
+
 $voyage = new VoyageC();
 $tab = $voyage->listeVoyage();
 
@@ -9,6 +10,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
        exit;
 
 }
+
+
+
+// Appel de la méthode getReservationData à partir de l'instance de VoyageC
+$reservationData = $voyage->getReservationData();
+
+// Obtenez les labels et les données de réservation
+$labels = $reservationData['labels'];
+$data = $reservationData['data'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,11 +93,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="index1.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                       
-                    <a href="voyage_back.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Voyage</a>
-                    <a href="reservation_back.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Reservation</a>
                     
+            
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Voyage</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="voyage_back.php" class="dropdown-item">liste voyage</a>
+                            <a href="reservation_back.php" class="dropdown-item">liste reservation</a>
+                     
                         
                 </div>
             </nav>
@@ -286,6 +299,79 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
 
     <!-- Template Javascript -->
     <script src="js1/main.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container-fluid pt-4 px-4">
+              
+                     
+    <div class="bg-light rounded-top p-4">
+                  
+           
+    <div style="width: 25%">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+    // Préparer les données pour le graphique
+    var labels = <?php echo json_encode($labels); ?>;
+    var data = <?php echo json_encode($data); ?>;
+
+    // Créer le graphique circulaire
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Nombre de Réservations par Destination',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            aspectRatio: 1, // Pour s'assurer que le graphique est un cercle
+            scales: {
+                y: {
+                    display: false
+                }
+            }
+        }
+    });
+    </script>
+
+</div>
+            </div>
+            </div>
+            
+
+
+
 </body>
 
 </html>

@@ -1,49 +1,39 @@
 <?php
+include "../Controller/ReservationC.php";
 
-include '../Controller/ReservationC.php'; // Inclure le contrôleur de réservation
-include '../Model/Reservation.php'; // Inclure le modèle de réservation
-
-
-$reservationC = new ReservationC(); // Créer une instance du contrôleur de réservation
-
-// Vérifier si les données du formulaire sont définies
-if (
-    isset($_POST['id_voyage']) &&
-    isset($_POST['date_reservation']) &&
-    isset($_POST['nombre_personnes']) &&
-    isset($_POST['numero_personne'])
-) {
-    // Créer une nouvelle instance de réservation en récupérant les données du formulaire
-    $reservation = new Reservation(
-        null,
-        $_POST['id_voyage'],
-        $_POST['date_reservation'],
-        $_POST['nombre_personnes'],
-        $_POST['numero_personne']
-    );
-
-    // Ajouter la réservation
-    $reservationC->ajouterReservation($reservation);
-    
-}
+$reservation = new ReservationC();
+$tab = $reservation->listeReservation();
 $db = config::getConnexion();
 
-$sql = "SELECT id AS id_voyage, destination FROM voyage";
-$query = $db->prepare($sql);
-$query->execute();
-$voyages = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+    $reservation->deleteReservation($_GET['id']);
+       exit;
+
+}
+
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <head>
-        <meta charset="utf-8">
-        <title>Travela - Tourism Website Template</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="keywords">
-        <meta content="" name="description">
+   
+
+
+<title>user about me section - Bootdey.com</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+   
+    
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,34 +56,132 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         <link href="css/style.css" rel="stylesheet">
 
 
+        
 
-        <style>
-        /* Style pour la liste déroulante */
-        .form-select {
-            background-color: #343a40; /* Couleur de fond */
-            color: #fff; /* Couleur du texte */
-        }
+<style type="text/css">
+    	body{margin-top:20px;}
+.card-style1 {
+    box-shadow: 0px 0px 50px 0px rgb(89 75 128 / 9%);
+}
+.border-0 {
+    border: 0!important;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
 
-        /* Style pour l'élément de sélection de langue de Google Translate */
-        .translate {
-            background-color: #343a40; /* Couleur de fond */
-            color: #fff; /* Couleur du texte */
-        }
+section {
+    padding: 120px 0;
+    overflow: hidden;
+    background: #fff;
+}
+.mb-2-3, .my-2-3 {
+    margin-bottom: 2.3rem;
+}
+
+.section-title {
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+.text-primary {
+    color: #ceaa4d !important;
+}
+.text-secondary {
+    color: #15395A !important;
+}
+.font-weight-600 {
+    font-weight: 600;
+}
+.display-26 {
+    font-size: 1.3rem;
+}
+
+.blue-icon {
+    color: #274472;
+}
+
+@media screen and (min-width: 992px){
+    .p-lg-7 {
+        padding: 4rem;
+    }
+}
+@media screen and (min-width: 768px){
+    .p-md-6 {
+        padding: 3.5rem;
+    }
+}
+@media screen and (min-width: 576px){
+    .p-sm-2-3 {
+        padding: 2.3rem;
+    }
+}
+.p-1-9 {
+    padding: 1.9rem;
+}
+
+.bg-secondary {
+    background: #15395A !important;
+}
+@media screen and (min-width: 576px){
+    .pe-sm-6, .px-sm-6 {
+        padding-right: 3.5rem;
+    }
+}
+@media screen and (min-width: 576px){
+    .ps-sm-6, .px-sm-6 {
+        padding-left: 3.5rem;
+    }
+}
+.pe-1-9, .px-1-9 {
+    padding-right: 1.9rem;
+}
+.ps-1-9, .px-1-9 {
+    padding-left: 1.9rem;
+}
+.pb-1-9, .py-1-9 {
+    padding-bottom: 1.9rem;
+}
+.pt-1-9, .py-1-9 {
+    padding-top: 1.9rem;
+}
+.mb-1-9, .my-1-9 {
+    margin-bottom: 1.9rem;
+}
+@media (min-width: 992px){
+    .d-lg-inline-block {
+        display: inline-block!important;
+    }
+}
+.rounded {
+    border-radius: 0.25rem!important;
+}
     </style>
-    </head>
 
-    <body>
 
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+
+</head>
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
         <!-- Spinner End -->
 
-       
-        
+             
   <!-- Topbar Start -->
   <div class="container-fluid bg-primary px-5 d-none d-lg-block">
             <div class="row gx-0">
@@ -126,9 +214,10 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <!-- Topbar End -->
 
-       
-       <!-- Navbar & Hero Start -->
-       <div class="container-fluid position-relative p-0">
+
+
+              <!-- Navbar & Hero Start -->
+              <div class="container-fluid position-relative p-0">
                 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
                     <a href="" class="navbar-brand p-0">
                         <h1 class="m-0"><img src="tayara.png" alt="VieXplore Logo" class="me-3">VieXplore</h1>
@@ -153,105 +242,76 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <!-- Navbar & Hero End -->
 
-
         <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">
             <div class="container text-center py-5" style="max-width: 900px;">
-                <h3 class="text-white display-3 mb-4">Online Booking</h1>
+                <h3 class="text-white display-3 mb-4">Votre Profile</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item active text-white">Online Booking</li>
+                  
                 </ol>    
             </div>
         </div>
         <!-- Header End -->
 
-        <!-- Tour Booking Start -->
-        <div class="container-fluid booking py-5">
-            <div class="container py-5">
-                <div class="row g-5 align-items-center">
-                    <div class="col-lg-6">
-                        <h5 class="section-booking-title pe-3">Booking</h5>
-                        <h1 class="text-white mb-4">Online Booking</h1>
-                        <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur maxime ullam esse fuga blanditiis accusantium pariatur quis sapiente, veniam doloribus praesentium? Repudiandae iste voluptatem fugiat doloribus quasi quo iure officia.
-                        </p>
-                        <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur maxime ullam esse fuga blanditiis accusantium pariatur quis sapiente, veniam doloribus praesentium? Repudiandae iste voluptatem fugiat doloribus quasi quo iure officia.
-                        </p>
-                        <a href="#" class="btn btn-light text-primary rounded-pill py-3 px-5 mt-2">Read More</a>
-                    </div>
-                    <div class="col-lg-6">
-                        <h1 class="text-white mb-3">Book A Tour Deals</h1>
-                        <form action="" method="post" id=form >
-                            <div class="row g-3">
-                            <div class="col-md-6">
-    <div class="form-floating date" id="date3" data-target-input="nearest">
-        <select name="id_voyage" class="form-control bg-white border-0" oninput="change(this)">
-            <option value="" disabled selected></option>
-            <?php foreach ($voyages as $voyage) : ?>
-                <option value="<?php echo $voyage['id_voyage']; ?>"><?php echo $voyage['destination']; ?></option>
-            <?php endforeach; ?>
-        </select>
-        <label for="id_voyage">Choississez votre destination:</label>
-    </div>
+<section class="bg-light">
+<div class="container">
+<div class="row">
+<div class="col-lg-12 mb-4 mb-sm-5">
+<div class="card card-style1 border-0">
+<div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+<div class="row align-items-center">
 
-    
+<div class="col-lg-6 px-xl-10">
+<div class="bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
+<h5 class="h2 text-white mb-0">Your Reservation</h3>
+
 </div>
+<?php
+    foreach ($tab as $Reservation){
+    $voyage_id = $Reservation['id_voyage'];
+    $sql = "SELECT destination FROM voyage WHERE id = :id";
+    $query = $db->prepare($sql);
+    $query->bindParam(':id', $voyage_id);
+    $query->execute();
+    $voyage = $query->fetch(PDO::FETCH_ASSOC);
+    ?>
+<ul class="list-unstyled mb-1-9">
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Destination:</span><?php echo $voyage['destination']; ?></li>
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Date de creation:</span> <?php echo $Reservation["date_reservation"] ?></li>
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Nombre de personne:</span> <?php echo $Reservation["nombre_personnes"] ?></li>
+<li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600">Phone:</span> <?php echo $Reservation["numero_personne"] ?></li>
+<br>
+
+<td>
+    <a href="user_edit.php?id=<?php echo $Reservation["id"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3 blue-icon"></i></a>
+  
+    <a href="?action=delete&id=<?= $Reservation['id'] ?>" onclick="return confirm('Are you sure you want to delete this record?');" class="link-dark">
+        <i class="fas fa-trash fs-5 blue-icon"></i>
+    </a>
+    </td>
 
 
 
-                                <input type="hidden" id="date_reservation" name="date_reservation" value="<?php echo date('Y-m-d'); ?>">
-                               
-                                <div class="col-md-6">
-                                
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                
-                                    
-                                    <input type="number" class="form-control bg-white border-0" oninput="change(this)" id="nombre_personnes"  name="nombre_personnes" placeholder="nombre_personnes" />
-                                        <label for="nombre_personnes">Nombre de Personnes:</label>
-                    <div>
-                    <label id="nombre_personneserror" style="color: orange;"></label>
-   <label id="nombre_personnescorrect" style="color: white;"></label>
-            </div>
-            
-                                    </div>
-                                </div>
-                                <center>
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" class="form-control bg-white border-0" id="numero_personne"  oninput="change(this)" name="numero_personne" placeholder="numero_personne" />
-                                        <label for="numero_personne">Numero de Personnes:</label>
-
-                                   <div>
-                    <label id="numero_personneerror" style="color: orange;"></label>
-   <label id="numero_personnecorrect" style="color: white;"></label>
-            </div>
-                                        
-                                        <br>
-            
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-primary text-white w-100 py-3" type="submit">Reserver</button>
-                                </div>
-                            </div>
-                        </form>
-        <div class="code_qr">
-      <img class="qrious">
-     
-<div class="information">
-   <p style="color:blue"> Valeur:</p>
-   <p> Ici la valeur du code qr</p>
-</div>
-</div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Tour Booking End -->
-
+<?php
+        }
+        ?>
+        <br>
        
-        <!-- Footer Start -->
-        <div class="container-fluid footer py-5">
+
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-12 mb-4 mb-sm-5">
+
+</div>
+
+</section>
+ <!-- Footer Start -->
+ <div class="container-fluid footer py-5">
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-3">
@@ -309,9 +369,7 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </form>
 
-                                <!-- Translation Code here -->
-					
-					<!-- Translation Code End here -->
+                                </div>
                                 <div class="col-xl-6">
                                     <form>
                                         <div class="form-floating">
@@ -361,8 +419,14 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <!-- Copyright End -->
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	
+</script>
+
+
+<a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
         
         <!-- JavaScript Libraries -->
@@ -376,69 +440,6 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
-        <script src="qrious.js"></script>
-<script src="script.js"></script>
 
-
-
-
-
-<script>
-    document.getElementById("form").addEventListener("submit", function(e) {
-    var hasError = false; // Variable pour suivre si une validation a échoué
-
-
-   
-
-    var nombre_personnes = document.getElementById("nombre_personnes").value;
-    var nombre_personneserror = document.getElementById("nombre_personneserror");
-    var nombre_personnescorrect = document.getElementById("nombre_personnescorrect");
-
-    nombre_personnescorrect.textContent = '';
-    nombre_personneserror.textContent = '';
-
-    if (nombre_personnes > 10) {
-        nombre_personneserror.textContent = " Le nombre maximum de personnes est de 10.";
-        hasError = true; // Définir hasError à true si la validation échoue
-    } else {
-        nombre_personnescorrect.textContent = "Correct.";
-    }
-
-
-
-
-    var numero_personne = document.getElementById("numero_personne").value;
-    var numero_personneerror = document.getElementById("numero_personneerror");
-    var numero_personnecorrect = document.getElementById("numero_personnecorrect");
-
-    numero_personnecorrect.textContent = '';
-    numero_personneerror.textContent = '';
-
-    if (numero_personne === "") {
-        numero_personneerror.textContent = "La numero ne doit pas être vide.";
-        hasError = true; // Définir hasError à true si la validation échoue
-    } else {
-        numero_personnecorrect.textContent = "Correct.";
-    }
-
-
-    
-
-    // Empêcher la soumission du formulaire si une validation a échoué
-    if (hasError) {
-        e.preventDefault();
-    }
-});
-  </script>
-
-
-
-
-
-
-
-
-
-    </body>
-
+</body>
 </html>

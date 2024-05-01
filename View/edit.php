@@ -29,7 +29,7 @@ if (isset($_POST["submit"])) {
     $result = $voyageC->updateVoyage($id, $type, $destination, $dateDepart, $dateRetour, $targetFile);
 
     if ($result) {
-        header("Location: element.php?msg=Données mises à jour avec succès");
+        header("Location: voyage_back.php?msg=Données mises à jour avec succès");
         exit;
     } else {
         echo "Échec de la mise à jour des données.";
@@ -125,7 +125,7 @@ $db = config::getConnexion();
 
         <div>
           <button type="submit" class="btn btn-success" name="submit">Update</button>
-          <a href="element.php" class="btn btn-danger">Cancel</a>
+          <a href="voyage_back.php" class="btn btn-danger">Cancel</a>
         </div>
       </form>
 
@@ -139,7 +139,7 @@ $db = config::getConnexion();
 
 
 
-
+  
 
 
   <!-- Bootstrap -->

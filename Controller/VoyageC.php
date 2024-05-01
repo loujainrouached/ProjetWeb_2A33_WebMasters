@@ -74,7 +74,7 @@ public function deleteVoyage($id) {
         $req->execute();
 
         // Redirect after successful deletion
-        header("Location: element.php?msg=Data deleted successfully");
+        header("Location: voyage_back.php?msg=Data deleted successfully");
         exit(); // Terminate script execution after redirection
     } catch (PDOException $e) {
         // Handle any database-related errors
@@ -82,6 +82,39 @@ public function deleteVoyage($id) {
     }
 }
 
+
+
+function getReservationData()
+{
+    try {
+        // Obtenez une instance de connexion PDO en appelant la méthode statique getConnexion de la classe config
+        $pdo = config::getConnexion();
+
+        $sql = "SELECT v.destination, COUNT(r.id) AS nombre_reservations
+                FROM reservation r
+                INNER JOIN voyage v ON r.id_voyage = v.id
+                GROUP BY v.destination";
+
+        // Exécution de la requête SQL
+        $stmt = $pdo->query($sql);
+
+        // Préparation des données pour le graphique
+        $labels = [];
+        $data = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $labels[] = $row['destination'];
+            $data[] = $row['nombre_reservations'];
+        }
+
+        // Retourner les données sous forme de tableau associatif
+        return ['labels' => $labels, 'data' => $data];
+    } catch (PDOException $e) {
+        // En cas d'erreur, afficher le message d'erreur
+        echo "Erreur d'exécution de la requête : " . $e->getMessage();
+        // Retourner une valeur par défaut (par exemple, un tableau vide)
+        return ['labels' => [], 'data' => []];
+    }
+}
 
 
 
