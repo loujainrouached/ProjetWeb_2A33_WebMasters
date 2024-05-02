@@ -253,6 +253,8 @@ if (isset($_POST['nature']) && !empty($_POST['nature'])) {
     <button type="submit" class="btn btn-warning">Rechercher</button>
     <select class="form-select me-2" name="nature">
         <option value="Admin">Admin</option>
+
+        
         <option value="Client">Client</option>
     </select>
     <button type="submit" class="btn btn-primary">Filtrer</button>
