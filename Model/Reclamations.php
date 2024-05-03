@@ -8,13 +8,13 @@ class Reclamations
     private ?string $titre_reclamation = null;
     private ?string $contenu = null;
 
-    public function __construct($id_client, $date_reclamation,$titre_reclamation,$contenu )
+    public function __construct($id_reclamation,$id_client,$date_reclamation,$titre_reclamation,$contenu)
     {
-        $this->id_reclamation = $id_reclamation;
-        $this->id_client= $id_client;
-        $this->date_reclamation = $date_reclamation;
-        $this->titre_reclamation = $titre_reclamation;
-        $this->contenu = $contenu;
+        $this->id_reclamation= $id_reclamation;
+        $this->id_client= $id_client;  
+        $this->date_reclamation=$date_reclamation;
+        $this->titre_reclamation=$titre_reclamation;
+        $this->contenu= $contenu;
     }
 
 
