@@ -1,27 +1,55 @@
 <?php
 include '../Controller/EmployeC.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+$userC = new UserC();
+
+ $randomCode = $userC->generateRandomCode();
+ 
+ function sendMail($email, $randomCode)
+ {
+    $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = MAILHOST;
+        $mail->SMTPAuth = true;
+        $mail->Username = USERNAME;
+        $mail->Password = PASSWORD;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587 ;  
+        $mail->setFrom(SEND_FROM, SEND_FROM_NAME);
+        $mail->addAddress($email);
+        $mail->addReplyTo(REPLY_TO, REPLY_TO_NAME);
+        $mail->isHTML(true);
+        $mail->Body = $randomCode;
+        if(!$mail->send())
+        {
+            return "not send";
+        }else{
+            return "success";
+        }
+ }
 
 // Initialisation du message
 $message = '';
-
 // Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
     // Récupérer l'email et le mot de passe soumis depuis le formulaire
-    $email = $_POST["email"];
-    $mdp = $_POST["mdp"];
-    if (empty($email) || empty($mdp)) {
-        $message = "Les champs sont manquants. Veuillez remplir tous les champs.";
+    $code = $_POST["code"];
+    if (empty($code) ) {
+        $message = "champ manquant";
     } else {
-    // Créer une instance de la classe UserC
     $userC = new UserC();
-
-    // Appeler la fonction loginUser pour vérifier si l'utilisateur existe avec cet email et ce mot de passe
-    if ($userC->loginUser($email, $mdp)) {
-        // Utilisateur existant
-        $message = "Connexion réussie. Bienvenue !";
+    if ($userC->loginUser1($email)) {
+   $message = "Code valide";
+ 
     } else {
-        // Utilisateur inexistant
-        $message = "Adresse e-mail ou mot de passe incorrect.";
+        $message = "code invalide ,verifier votre code.";
     }
 }
 }
@@ -242,20 +270,14 @@ body {
 
     </div>
 <div class="container" >
-    <h2>Connexion :</h2>
+    <h2>Consulter Votre Boite E-mail  :</h2>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <div class="mb-3">
-            <label for="email">Adresse e-mail :</label>
-            <input type="email" id="email" name="email" >
+            <label for="code">votre code :</label>
+            <input type="code" id="code" name="code" placeholder="entrer Le code">
         </div>
-        <div class="mb-3">
-            <label for="mdp">Mot de passe :</label>
-            <input type="password" id="mdp" name="mdp" >
-        </div>
-        <button type="submit">Connecter</button>
+        <button type="submit">verifier</button>
     </form>
-    <p class="signup-link">Vous n'avez pas de compte ? <a href="login.php">Inscription</a></p>
-    <p class="signup-link"><a href="reset.php">mot de passe oubliè ?</a></p>
     <?php if (!empty($message)) : ?>
         <!-- Affichage du message -->
         <p class="message"><?php echo $message; ?></p>

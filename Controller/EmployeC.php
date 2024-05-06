@@ -66,7 +66,19 @@ public function showUser($id)
         die('Error: ' . $e->getMessage());
     }
 }
-/*public function loginUser($email, $mdp)
+
+public function generateRandomCode($length = 8) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $code = '';
+    $max = strlen($characters) - 1;
+    for ($i = 0; $i < $length; $i++) {
+        $code .= $characters[rand(0, $max)];
+    }
+    return $code;
+}
+
+
+public function loginUser1($email)
 {
     $sql = "SELECT * FROM table_users WHERE  email_user = :email_user";
     $db = config::getConnexion();
@@ -77,7 +89,7 @@ public function showUser($id)
         $user = $query->fetch();
 
         // Check if user exists and password matches
-        if ($user && password_verify($mdp, $user['mdp'])) {
+        if ($user ) {
             // Vérification du type d'utilisateur après une connexion réussie
          
             // Retourner true si la connexion est réussie
@@ -89,7 +101,7 @@ public function showUser($id)
     } catch (Exception $e) {
         die('Error:' . $e->getMessage());
     }
-}*/
+}
 public function loginUser($email, $mdp)
 {
     $sql = "SELECT * FROM table_users WHERE  email_user = :email_user";
@@ -277,10 +289,10 @@ public function addEmploye($user)
     }
     
  // Vérification du mot de passe
-  if ($user->getmdp() !== $user->getconfirm_mdp()) {
+ /* if ($user->getmdp() !== $user->getconfirm_mdp()) {
     echo "Error: Le mot de passe et la confirmation du mot de passe ne correspondent pas.";
     return; // Arrêter l'exécution de la fonction
-}
+}*/
 
     
     // Vérification de l'unicité de l'adresse e-mail
@@ -320,8 +332,6 @@ public function addEmploye($user)
 
 
 
-
-
 public function addlogin($user)
 {
  
@@ -329,15 +339,15 @@ public function addlogin($user)
     
     // Vérification des champs obligatoires
    if (empty($user->getnom_user()) || empty($user->getprenom_user()) || empty($user->getemail_user()) || empty($user->getmdp()) || empty($user->getconfirm_mdp())) {
-        echo "Error: Tous les champs obligatoires doivent être remplis.";
+        echo " Tous les champs obligatoires doivent être remplis.";
         return; // Arrêter l'exécution de la fonction
     }
     
    // Vérification du mot de passe
-    if ($user->getmdp() !== $user->getconfirm_mdp()) {
+   /* if ($user->getmdp() !== $user->getconfirm_mdp()) {
         echo "Error: Le mot de passe et la confirmation du mot de passe ne correspondent pas.";
         return; // Arrêter l'exécution de la fonction
-    }
+    }*/
     
     // Vérification de l'unicité de l'adresse e-mail
    $existingUser = $db->prepare("SELECT COUNT(*) as count FROM table_users WHERE email_user = :email_user");

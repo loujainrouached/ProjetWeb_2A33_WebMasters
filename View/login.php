@@ -5,13 +5,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include '../Model/Employe.php';
 // Initialisation du message
 $message = '';
+
 if (empty($_POST['nom_user']) || empty($_POST['prenom_user']) || empty($_POST['email_user']) || empty($_POST['mdp']) || empty($_POST['confirm_mdp']) || empty($_FILES['photo_user'])) {
     $message = "Tous les champs doivent être remplis.";
-} else {
+} 
+ 
+else {
     // Vérifiez si les mots de passe correspondent
-    if ($_POST['mdp'] !== $_POST['confirm_mdp']) {
-        $message = "Les mots de passe ne correspondent pas.";
-    } 
+  if ($_POST['mdp'] !== $_POST['confirm_mdp']) {
+    $message = "Les mots de passe ne correspondent pas.";
+} 
+   
         // Vérifiez si un fichier a été téléchargé
         if (isset($_FILES['photo_user']) && $_FILES['photo_user']['error'] === UPLOAD_ERR_OK) {
             $targetDir = "users/"; // Chemin où enregistrer l'image (assurez-vous que le dossier existe)
@@ -322,7 +326,7 @@ body {
                 <tr>
                     <td><label for="email_user">Email :</label></td>
                     <td><input type="email" name="email_user" class="form-control"></td>
-                </tr>
+                                    </tr>
                 <tr>
                     <td><label for="mdp">Mot de passe :</label></td>
                     <td><input type="password" name="mdp" class="form-control"></td>
@@ -384,6 +388,12 @@ body {
         imageError.textContent = "Le format de l'image doit être JPEG ou PNG.";
         hasError = true; // Définir hasError à true si la validation échoue
     }   
+
+
+
+
+       
+
      // Empêcher la soumission du formulaire si une validation a échoué
      if (hasError) {
         e.preventDefault();

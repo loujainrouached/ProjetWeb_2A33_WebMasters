@@ -364,6 +364,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <br>
                 <input type="submit" value="S'inscrire" class="btn btn-primary">
             </div>
+            <div id="error-container"></div>
         </div>
     </div>
 </form>
@@ -524,6 +525,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+
+  
+
 </body>
 
 </html>

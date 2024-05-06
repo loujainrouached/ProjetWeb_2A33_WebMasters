@@ -4,13 +4,7 @@ require_once('lib/tcpdf/tcpdf.php');
 include "../Controller/EmployeC.php";
 session_start();
 $user1 = new UserC();
-if (isset($_POST['searchEmail'])) {
-    // Si une recherche par e-mail est effectuée, récupérez l'e-mail saisi et affichez l'utilisateur correspondant
-    $email = $_POST['searchEmail'];
-    $tab = $user1->afficherParEmail($email);
-}else {
-        $tab = $user1->listeEmploye();
-    }
+
     /*
     if (isset($_POST['searchEmail'])) {
     // Si une recherche par e-mail est effectuée, récupérez l'e-mail saisi et affichez l'utilisateur correspondant
