@@ -53,20 +53,7 @@ class functions
             die('Error:' . $e->getMessage());
         }
     }
-/*
-    function showGuide($ide)
-    {
-        $sql = "SELECT * from guides where ID_guide = :ID_guide";
-        $db = config::getConnexion();
-        try {
-            $query = $db->prepare($sql);
-            $query->execute(['ID_guide' => $ID_guide]);
-            $guide = $query->fetch();
-            return $guide;
-        } catch (PDOException $e) {
-            die('Error: ' . $e->getMessage());
-        }
-    }*/
+
 
     function updateGuide($guides, $ID_guide)
     {
@@ -98,27 +85,27 @@ class functions
             echo 'Error: ' . $e->getMessage();
         }
     }
-    /*
-    public function affichecomments($idblog) {
+    public function afficheGuide($ID_pays) {
         try {
             $pdo = config::getConnexion();
-            $query = $pdo->prepare("SELECT * FROM comment WHERE idblog = :id");
-            $query->execute(["id" => $idblog]);
+            $query = $pdo->prepare("SELECT * FROM guides WHERE ID_pays = :ID");
+            $query->execute(["ID" => $ID_pays]);
             return $query->fetchAll();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }
     
-    public function afficheGuide() {
+    public function affichePays() {
         try {
             $pdo = config::getConnexion();
-            $query = $pdo->prepare("SELECT * FROM guides");
+            $query = $pdo->prepare("SELECT * FROM pays");
             $query->execute();
             return $query->fetchAll();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    }*/
+    }
+   
     
 }

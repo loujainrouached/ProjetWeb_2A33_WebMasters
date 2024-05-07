@@ -79,6 +79,19 @@ if (!preg_match($emailRegExp, $Email)) {
     } else {
         $error = "Please fill in all required fields.";
     }
+    $db = config::getConnexion();
+    // Prépare la requête SQL avec un paramètre de placeholder (:id)
+    $sql = "SELECT * FROM guides WHERE ID_guide = :ID_guide ";
+    $query = $db->prepare($sql);
+    
+    // Lie le paramètre :id à la valeur de $id
+    $query->bindParam(':ID_guide', $ID_guide, PDO::PARAM_INT);
+    
+    // Exécute la requête préparée
+    $query->execute();
+    
+    // Récupère le résultat de la requête
+    $row = $query->fetch(PDO::FETCH_ASSOC);
 
 
 ?>
@@ -191,42 +204,42 @@ if (!preg_match($emailRegExp, $Email)) {
             <tr>
                 <td><label for="Nom">Nom :</label></td>
                 <td>
-                    <input type="text" id="Nom" name="Nom" />
+                    <input type="text" id="Nom" name="Nom" value="<?php echo $row['Nom'] ?>" />
                     <span id="erreurNom" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="Prenom">Prenom :</label></td>
                 <td>
-                    <input type="text" id="Prenom" name="Prenom" />
+                    <input type="text" id="Prenom" name="Prenom" value="<?php echo $row['Prenom'] ?>" />
                     <span id="erreurPrenom" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="Age">Age :</label></td>
                 <td>
-                    <input type="number" id="Age" name="Age" />
+                    <input type="number" id="Age" name="Age" value="<?php echo $row['Age'] ?>" />
                     <span id="erreurAge" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="numTel">numTel :</label></td>
                 <td>
-                    <input type="number" id="numTel" name="numTel" />
+                    <input type="number" id="numTel" name="numTel" value="<?php echo $row['numTel'] ?>" />
                     <span id="erreurtitre" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="Email">Email :</label></td>
                 <td>
-                    <input type="text" id="Email" name="Email" />
+                    <input type="text" id="Email" name="Email" value="<?php echo $row['Email'] ?>" />
                     <span id="erreurEmail" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="nbvoyages">nbvoyages :</label></td>
                 <td>
-                    <input type="number" id="nbvoyages" name="nbvoyages" />
+                    <input type="number" id="nbvoyages" name="nbvoyages"  value="<?php echo $row['nbvoyages'] ?>"/>
                     <span id="erreurnbvoyages" style="color: red"></span>
                 </td>
             </tr>
@@ -328,9 +341,9 @@ textarea.addEventListener('input', function(event) {
   // Update the textarea value with the filtered value
   event.target.value = newValue;
 });
+
 </script>
 </body>
 
 </html>
-
 
