@@ -6,36 +6,26 @@ $error = "";
 $pays = null;
 $paysc = new functions();
 
-$ID_guide=$_POST["ID_pays"];
+$ID_pays=$_POST["ID_pays"];
 
 if (
     isset($_POST["NomP"]) &&
     isset($_POST["Capital"])&&
-    isset($_POST["monuments"])&&
-    isset($_POST["ID_guide"])
-   
-    
-    )
- ) {
+    isset($_POST["monuments"]))
+  {
     if (
         !empty($_POST['NomP']) &&
         !empty($_POST['Capital'])&&
-        !empty($_POST['monuments'])&&
-        !empty($_POST['ID_guide'])
-       
-        
+        !empty($_POST['monuments'])
 
     ) 
    
         // Create the blog object
-        $pays = new payss(
+        $pays = new pays(
             null,
             $_POST['NomP'],
             $_POST['Capital'],
-            $_POST['monuments'],
-            $_POST['ID_guide']
-           
-          
+            $_POST['monuments']
             
         );
         $NomP= $_POST['NomP'];
@@ -54,7 +44,7 @@ if (
 
         // Vérifier le Prenom
         if (!preg_match($nomRegExp, $Capital)) {
-            echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Prenom !!!!</div>';
+            echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Capital !!!!</div>';
             die(); // Arrête l'exécution du script après l'affichage du message
             // die(" verifier le Nom  !!!! ");
         }
@@ -63,7 +53,7 @@ if (
 
        
         $paysc->updatePays($pays,$ID_pays);
-        echo"guide information updated successfully";
+        echo"pays information updated successfully";
         header('Location:button.php');
         exit(); // Ensure to terminate execution after redirect
     } else {
@@ -156,8 +146,9 @@ if (
         }
 
         /* Error message style */
-        #erreurtitre,
-        #erreurcontenu {
+        #erreurNomP,
+        #erreurCapital
+        #erreurmonuments {
             color: red;
             display: none;
             margin-bottom: 20px;
@@ -195,36 +186,30 @@ if (
                 <td><label for="NomP">NomP :</label></td>
                 <td>
                     <input type="text" id="NomP" name="NomP" value="<?php echo $row['NomP'] ?>" />
-                    <span id="erreurNom" style="color: red"></span>
+                    <span id="erreurNomP" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="Capital">Capital :</label></td>
                 <td>
                     <input type="text" id="Capital" name="Capital" value="<?php echo $row['Capital'] ?>" />
-                    <span id="erreurPrenom" style="color: red"></span>
+                    <span id="erreurCapital" style="color: red"></span>
                 </td>
             </tr>
             <tr>
                 <td><label for="monuments">monuments :</label></td>
                 <td>
                     <input type="number" id="monuments" name="monuments" value="<?php echo $row['monuments'] ?>" />
-                    <span id="erreurAge" style="color: red"></span>
+                    <span id="erreurmonuments" style="color: red"></span>
                 </td>
             </tr>
-            <tr>
-                <td><label for="ID_guide">ID_guide :</label></td>
-                <td>
-                    <input type="number" id="ID_guide" name="ID_guide" value="<?php echo $row['ID_guide'] ?>" />
-                    <span id="erreurtitre" style="color: red"></span>
-                </td>
-            </tr>
+          
            
             
 
                 <td>
                     <input type="submit" value="Save">
-                    <input type="hidden" value="<?php echo $_POST["ID_Pays"] ?> "name="ID_Pays">
+                    <input type="hidden" value="<?php echo $_POST["ID_pays"] ?> "name="ID_pays">
 
                 </td>
 
@@ -236,47 +221,7 @@ if (
     </form>
     <script>
         
-/*  const nameInput = document.getElementById("Nom");
-const nameError = document.getElementById("erreurNom");
 
-nameInput.addEventListener("input", function () {
-    if (!/^[A-Za-z\s]+$/.test(nameInput.value)) {
-    nameError.innerText = "Please enter only letters.";
-    nameError.style.display = "block"; // Display the error message
-  } else {
-    nameError.innerText = ""; // Clear error message
-    nameError.style.display = "none"; // Hide the error message
-  }
-});
-     // Get the textarea element
-     const textarea = document.getElementById('Nom');
-
-// Add an input event listener to the textarea
-textarea.addEventListener('input', function(event) {
-  // Get the current textarea value
-  const value = event.target.value;
-  
-  // Remove any numbers from the textarea value
-  const newValue = value.replace(/\d/g, '');
-  
-  // Update the textarea value with the filtered value
-  event.target.value = newValue;
-});
-// Get the textarea element
-const textarea = document.getElementById('Prenom');
-
-// Add an input event listener to the textarea
-textarea.addEventListener('input', function(event) {
-  // Get the current textarea value
-  const value = event.target.value;
-  
-  // Remove any numbers from the textarea value
-  const newValue = value.replace(/\d/g, '');
-  
-  // Update the textarea value with the filtered value
-  event.target.value = newValue;
-});*/
-// Get the textarea element
 const textarea = document.getElementById('monuments');
 
 // Add an input event listener to the textarea

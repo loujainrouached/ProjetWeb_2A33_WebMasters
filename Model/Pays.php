@@ -5,17 +5,17 @@ class Pays
     private ?string $NomP = null;
     private ?string $Capital = null;
     private ?int $monuments= null;
-    private ?int $ID_guide = null;
+    
     
     
 
-    public function __construct($ID, $N, $P,$A,$n)
+    public function __construct($ID, $N, $P,$A)
     {
         $this->ID_pays = $ID;
         $this->NomP = $N;
         $this->Capital = $P;
         $this->monuments = $A;
-        $this->ID_guide = $n;
+        
         
     }
 
@@ -66,17 +66,7 @@ class Pays
         return $this;
     }
 
-    public function getID_guide()
-    {
-        return $this->ID_guide;
-    }
-
-    public function setID_guide($ID_guide)
-    {
-        $this->ID_guide = $ID_guide;
-
-        return $this;
-    }
+   
     
    
 

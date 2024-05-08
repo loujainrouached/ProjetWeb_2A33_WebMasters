@@ -13,7 +13,9 @@ if (
     isset($_POST["Age"]) &&
     isset($_POST["numTel"]) &&
     isset($_POST["Email"]) &&
-    isset($_POST["nbvoyages"])
+    isset($_POST["nbvoyages"])&&
+    isset($_POST["ID_pays"])
+
 ) {
     if (
         !empty($_POST['ID_guide']) &&
@@ -22,7 +24,8 @@ if (
         !empty($_POST['Age']) &&
         !empty($_POST['numTel']) &&
         !empty($_POST['Email']) &&
-        !empty($_POST['nbvoyages'])
+        !empty($_POST['nbvoyages'])&&
+        !empty($_POST['ID_pays'])
     ) {
         // Create the guide object
         $guides = new guides(
@@ -32,7 +35,8 @@ if (
             $_POST['Age'],
             $_POST['numTel'],
             $_POST['Email'],
-            $_POST['nbvoyages']
+            $_POST['nbvoyages'],
+            $_POST['ID_pays']
         );
         $Nom= $_POST['Nom'];
         $nomRegExp = "/^[A-Za-z]+$/"; // Expression régulière pour vérifier que le nom et le prénom ne contiennent que des lettres
@@ -68,7 +72,7 @@ if (!preg_match($emailRegExp, $Email)) {
         // Add the guide to the database
         $guidec->addGuide($guides);
         echo "Guide information added successfully.";
-        header('Location: listGuide.php');
+        header('Location: typography.php');
         exit(); // Ensure to terminate execution after redirect
     } else {
         $error = "Please fill in all required fields.";
@@ -125,6 +129,14 @@ if (!preg_match($emailRegExp, $Email)) {
             margin-bottom: 20px;
             font-size: 18px; /* Increased font size */
         }
+        select {
+    border: 1px solid orange;
+    padding: 15px;
+    width: calc(100% - 60px); /* Adjusted width to accommodate borders */
+    box-sizing: border-box;
+    margin-bottom: 28px;
+    font-size: 18px; /* Increased font size */
+}
 
 
 
@@ -182,7 +194,7 @@ if (!preg_match($emailRegExp, $Email)) {
 </head>
 
 <body>
-    <a href="listGuide.php">Back to list</a>
+    <a href="typography.php">Back to list</a>
     <hr>
     <div id="error">
         <?php echo $error; ?>
@@ -216,6 +228,19 @@ if (!preg_match($emailRegExp, $Email)) {
             <tr>
                 <td><label for="nbvoyages">nbvoyages :</label></td>
                 <td><input type="number" id="nbvoyages" name="nbvoyages" /></td>
+            </tr>
+            <tr>
+            <td>
+                
+        <label for="ID_pays"> pays :</label>
+    <select id="ID_pays" name="ID_pays">
+        <?php
+    $pays= $guidec->affichePays();
+         foreach ($pays as $pays) { 
+            echo '<option value="' . $pays['ID_pays'] . '">' . $pays['ID_pays']    . $pays['NomP']  . '</option>';
+         } ?>
+    </select>
+</td>
             </tr>
             <tr>
                 <td><input type="submit" value="Save"></td>
@@ -362,6 +387,19 @@ textarea.addEventListener('input', function(event) {
 });
 // Get the textarea element
 const textarea = document.getElementById('nbvoyages');
+
+// Add an input event listener to the textarea
+textarea.addEventListener('input', function(event) {
+  // Get the current textarea value
+  const value = event.target.value;
+  
+  // Remove any non-numeric characters from the textarea value
+  const newValue = value.replace(/\D/g, '');
+  
+  // Update the textarea value with the filtered value
+  event.target.value = newValue;
+});
+const textarea = document.getElementById('ID_pays');
 
 // Add an input event listener to the textarea
 textarea.addEventListener('input', function(event) {

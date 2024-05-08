@@ -28,15 +28,15 @@ $tab = $functions->listGuide();
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
         <!-- Libraries Stylesheet -->
-        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+        <link href="lib1/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="lib1/lightbox/css/lightbox.min.css" rel="stylesheet">
 
 
         <!-- Customized Bootstrap Stylesheet -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css1/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Stylesheet -->
-        <link href="css/style.css" rel="stylesheet">
+        <link href="css1/style.css" rel="stylesheet">
         <style>
     body {
         background-color: #8b0000; /* Dark Red */
@@ -67,7 +67,9 @@ $tab = $functions->listGuide();
         </div>
         <!-- Spinner End -->
 
-        <!-- Topbar Start -->
+        
+     
+
         <div class="container-fluid bg-primary px-5 d-none d-lg-block">
             <div class="row gx-0">
                 <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
@@ -113,7 +115,7 @@ $tab = $functions->listGuide();
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <a href="index1.html" class="nav-item nav-link active">Home</a>
                             <a href="about.html" class="nav-item nav-link">About</a>
                             <a href="services.html" class="nav-item nav-link">Reclamation</a>
                             <a href="blog.html" class="nav-item nav-link">Blog</a>
@@ -125,19 +127,18 @@ $tab = $functions->listGuide();
         </div>
         <!-- Navbar & Hero End -->
 
-        <!-- Header Start -->
-        <div class="container-fluid bg-breadcrumb">
-            <div class="container text-center py-5" style="max-width: 900px;">
-                <h3 class="text-white display-3 mb-4">Our Travel Guides</h1>
-                <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active text-white">Guides</li>
-                </ol>    
-            </div>
-        </div>
-        <!-- Header End -->
-        
+      <!-- Header Start -->
+<div class="container-fluid bg-breadcrumb breadcrumb-bg">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h3 class="text-white display-3 mb-4">Our Travel Guides</h3>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="index1.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Pages</a></li>
+            <li class="breadcrumb-item active text-white">Guides</li>
+        </ol>    
+    </div>
+</div>
+<!-- Header End -->
 
 <?php
 $startId = 2; // Starting guide ID
@@ -303,14 +304,14 @@ foreach ($tab as $index => $guide) {
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/lightbox/js/lightbox.min.js"></script>
+        <script src="lib1/easing/easing.min.js"></script>
+        <script src="lib1/waypoints/waypoints.min.js"></script>
+        <script src="lib1/owlcarousel/owl.carousel.min.js"></script>
+        <script src="lib1/lightbox/js/lightbox.min.js"></script>
         
 
         <!-- Template Javascript -->
-        <script src="js/main.js"></script>
+        <script src="js1/main.js"></script>
     </body>
 
 </html>

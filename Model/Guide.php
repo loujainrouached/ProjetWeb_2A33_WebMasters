@@ -8,9 +8,10 @@ class Guides
     private ?int $numTel = null;
     private ?string $Email  = null;
     private ?int $nbvoyages = null;
+    private ?int $ID_pays = null;
     
 
-    public function __construct($ID, $N, $P,$A,$n,$E,$nb)
+    public function __construct($ID, $N, $P,$A,$n,$E,$nb,$IDe)
     {
         $this->ID_guide = $ID;
         $this->Nom = $N;
@@ -19,6 +20,7 @@ class Guides
         $this->numTel = $n;
         $this->Email = $E;
         $this->nbvoyages = $nb;
+        $this->ID_pays = $IDe;
         
     }
 
@@ -103,5 +105,12 @@ class Guides
 
         return $this;
     }
+    public function getID_pays()
+    {
+        return $this->ID_pays;
+    }
+
+
+   
 
 }

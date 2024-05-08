@@ -10,16 +10,16 @@ if (
     isset($_POST["ID_pays"]) &&
     isset($_POST["NomP"]) &&
     isset($_POST["Capital"]) &&
-    isset($_POST["monuments"]) &&
-    isset($_POST["ID_guide"]) 
+    isset($_POST["monuments"]) 
+    
     
 ) {
     if (
         !empty($_POST['ID_pays']) &&
         !empty($_POST['NomP']) &&
         !empty($_POST['Capital']) &&
-        !empty($_POST['monuments']) &&
-        !empty($_POST['ID_guide']) 
+        !empty($_POST['monuments']) 
+    
         
     ) {
         // Create the guide object
@@ -27,8 +27,8 @@ if (
             $_POST['ID_pays'],
             $_POST['NomP'],
             $_POST['Capital'],
-            $_POST['monuments'],
-            $_POST['ID_guide']
+            $_POST['monuments']
+            
           
         );
         $NomP= $_POST['NomP'];
@@ -47,7 +47,7 @@ if (
 
         // Vérifier le Prenom
         if (!preg_match($nomRegExp, $Capital)) {
-            echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Prenom !!!!</div>';
+            echo '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: #ffe6e6; padding: 20px; border: 1px solid #ff0000; color: #ff0000; font-size: 20px; border-radius: 5px;">Verifier Capital!!!!</div>';
             die(); // Arrête l'exécution du script après l'affichage du message
             // die(" verifier le Nom  !!!! ");
         }
@@ -59,7 +59,7 @@ if (
         // Add the guide to the database
         $paysc->addPays($pays);
         echo "Pays information added successfully.";
-        header('Location: listPays.php');
+        header('Location: button.php');
         exit(); // Ensure to terminate execution after redirect
     } else {
         $error = "Please fill in all required fields.";
@@ -172,7 +172,7 @@ if (
 </head>
 
 <body>
-    <a href="listPays.php">Back to list</a>
+    <a href="button.php">Back to list</a>
     <hr>
     <div id="error">
         <?php echo $error; ?>
@@ -195,10 +195,7 @@ if (
                 <td><label for="monuments">monuments :</label></td>
                 <td><input type="number" id="monuments" name="monuments" /></td>
             </tr>
-            <tr>
-                <td><label for="ID_guide">ID_guide :</label></td>
-                <td><input type="number" id="ID_guide" name="ID_guide" /></td>
-            </tr>
+           
            
             <tr>
                 <td><input type="submit" value="Save"></td>

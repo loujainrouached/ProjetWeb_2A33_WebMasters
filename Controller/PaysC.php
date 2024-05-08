@@ -21,7 +21,7 @@ class functions
 
     function addPays($pays)
     {
-        $sql = "INSERT INTO pays (ID_pays,NomP, Capital, monuments, ID_guide) VALUES (:ID_pays, :NomP, :Capital, :monuments, :ID_guide )";
+        $sql = "INSERT INTO pays (ID_pays,NomP, Capital, monuments) VALUES (:ID_pays, :NomP, :Capital, :monuments )";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
@@ -29,8 +29,8 @@ class functions
                 'ID_pays' => $pays->getID_pays(),
                 'NomP' => $pays->getNomP(),
                 'Capital' => $pays->getCapital(),
-                'monuments' => $pays->getmonuments(),
-                'ID_guide' => $pays->getID_guide()
+                'monuments' => $pays->getmonuments()
+                
                 
 
             ]);
@@ -66,27 +66,27 @@ class functions
             die('Error: ' . $e->getMessage());
         }
     }*/
-/*
-    function updatePays($Pays, $ID_pays)
+
+    function updatePays($pays, $ID_pays)
     {
         try {
-            $db = configP::getConnexion();
+            $db = config::getConnexion();
             $query = $db->prepare(
-                'UPDATE Pays SET 
+                'UPDATE pays SET 
                     NomP = :NomP, 
                     Capital = :Capital,
-                    monuments = :monuments,
-                    ID_guide = :ID_guide
+                    monuments = :monuments
+                    
                     
                  WHERE ID_pays = :ID_pays'
             );
     
             $query->execute([
-                'ID_Pays' => $ID_Pays,
-                'NomP' => $Pays->getNomP(),
-                'Capital' => $Pays->getCapital(),
-                'monuments' => $Pays->getmonuments(),
-                'ID_guide' => $Pays->getID_guide()
+                'ID_pays' => $ID_pays,
+                'NomP' => $pays->getNomP(),
+                'Capital' => $pays->getCapital(),
+                'monuments' => $pays->getmonuments()
+                
                 
             ]);
     
@@ -94,7 +94,7 @@ class functions
         } catch (PDOException $e) {
             echo 'Error: ' . $e->getMessage();
         }
-    }*/
+    }
     /*
     public function affichecomments($idblog) {
         try {
@@ -107,7 +107,7 @@ class functions
         }
     }*/
     
-    public function affichePays() {
+  /*  public function affichePays() {
         try {
             $pdo = config::getConnexion();
             $query = $pdo->prepare("SELECT * FROM pays");
@@ -116,6 +116,60 @@ class functions
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
+    }*/
+    function searchPays($NomP)
+    {
+        $sql = "SELECT * FROM pays WHERE NomP LIKE :NomP";
+        $db = config::getConnexion();
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':NomP', '%' . $NomP . '%', PDO::PARAM_STR);
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (Exception $e) {
+            die('Error:' . $e->getMessage());
+        }
     }
+    public function tripmonuments($order = 'ASC') {
+        $sql = "SELECT * FROM pays ORDER BY monuments $order";
+        $db = config::getConnexion();
+        try {
+            $liste = $db->query($sql);
+            return $liste;
+        } catch (Exception $e) {
+            die('Erreur:'. $e->getMessage());
+        }
+    }
+    function getguides()
+    {
+        try {
+            $pdo = config::getConnexion();
+            $sql = "SELECT p.NomP AS country, COUNT(g.ID_guide) AS guide_count
+                    FROM pays p
+                    LEFT JOIN guides g ON p.ID_pays = g.ID_pays
+                    GROUP BY p.ID_pays";
     
+            $stmt = $pdo->query($sql);
+    
+            $labels = [];
+            $data = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $labels[] = $row['country'];
+                $data[] = $row['guide_count'];
+            }
+    
+           
+    
+            return ['labels' => $labels, 'data' => $data];
+        } catch (PDOException $e) {
+            echo "Error executing the query: " . $e->getMessage();
+            return ['labels' => [], 'data' => []];
+        }
+    }
 }
+    
+    
+
+    
+    
