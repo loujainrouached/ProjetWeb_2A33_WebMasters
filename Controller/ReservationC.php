@@ -89,7 +89,41 @@ class ReservationC {
 
 
 
-
+    function getMonthlyReservationData()
+    {
+        try {
+            // Obtenez une instance de connexion PDO en appelant la méthode statique getConnexion de la classe config
+            $pdo = config::getConnexion();
+    
+            // Exécutez une requête SQL pour obtenir le nombre de réservations pour chaque mois
+            $sql = "SELECT COUNT(*) AS nombre_reservations, MONTH(date_reservation) AS mois
+                    FROM reservation
+                    WHERE YEAR(date_reservation) = YEAR(CURRENT_DATE())
+                    GROUP BY MONTH(date_reservation)";
+    
+            // Exécution de la requête SQL
+            $stmt = $pdo->query($sql);
+    
+            // Préparation des données pour le graphique
+            $labels = [];
+            $data = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Utilisez la fonction date() pour obtenir le nom du mois à partir de son numéro
+                $mois = date('F', mktime(0, 0, 0, $row['mois'], 1));
+                $labels[] = $mois;
+                $data[] = $row['nombre_reservations'];
+            }
+    
+            // Retourner les données sous forme de tableau associatif
+            return ['labels' => $labels, 'data' => $data];
+        } catch (PDOException $e) {
+            // En cas d'erreur, afficher le message d'erreur
+            echo "Erreur d'exécution de la requête : " . $e->getMessage();
+            // Retourner une valeur par défaut (par exemple, un tableau vide)
+            return ['labels' => [], 'data' => []];
+        }
+    }
+    
 
 
 

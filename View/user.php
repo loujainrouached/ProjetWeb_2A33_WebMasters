@@ -26,7 +26,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
    
 
 
-<title>user about me section - Bootdey.com</title>
+<title>Votre profile</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -170,7 +170,6 @@ section {
     </style>
 
 
-
 </head>
 <body>
     <!-- Spinner Start -->
@@ -276,10 +275,12 @@ section {
     $voyage = $query->fetch(PDO::FETCH_ASSOC);
     ?>
 <ul class="list-unstyled mb-1-9">
-<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Destination:</span><?php echo $voyage['destination']; ?></li>
-<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Date de creation:</span> <?php echo $Reservation["date_reservation"] ?></li>
-<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Nombre de personne:</span> <?php echo $Reservation["nombre_personnes"] ?></li>
-<li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600">Phone:</span> <?php echo $Reservation["numero_personne"] ?></li>
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600" oninput="change(this)">Destination:</span><?php echo $voyage['destination']; ?></li>
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600" oninput="change(this)">Date de creation:</span> <?php echo $Reservation["date_reservation"] ?></li>
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600" oninput="change(this)">Nombre de personne:</span> <?php echo $Reservation["nombre_personnes"] ?></li>
+<li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600" oninput="change(this)">Phone:</span> <?php echo $Reservation["numero_personne"] ?></li>
+
+
 <br>
 
 <td>
@@ -291,12 +292,13 @@ section {
     </td>
 
 
-
 <?php
         }
         ?>
         <br>
-       
+
+         <!-- QR CODE -->
+         
 
 </ul>
 
@@ -425,11 +427,11 @@ section {
 	
 </script>
 
-
 <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
         
         <!-- JavaScript Libraries -->
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
@@ -440,6 +442,13 @@ section {
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script src="qrious.js"></script>
+       
+<script src="script.js"></script>
 
-</body>
+ <!-- JavaScript pour générer les QR codes -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator/umd/qrcode.min.js"></script>
+
+
+<body>
 </html>

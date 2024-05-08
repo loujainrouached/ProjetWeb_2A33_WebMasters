@@ -2,7 +2,7 @@
 
 include '../Controller/ReservationC.php'; // Inclure le contrôleur de réservation
 include '../Model/Reservation.php'; // Inclure le modèle de réservation
-
+include 'qrCode.php';
 
 $reservationC = new ReservationC(); // Créer une instance du contrôleur de réservation
 
@@ -44,6 +44,9 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+   
+        <link rel="stylesheet" href="./build/app.css">
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -172,11 +175,33 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
                     <div class="col-lg-6">
                         <h5 class="section-booking-title pe-3">Booking</h5>
                         <h1 class="text-white mb-4">Online Booking</h1>
-                        <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur maxime ullam esse fuga blanditiis accusantium pariatur quis sapiente, veniam doloribus praesentium? Repudiandae iste voluptatem fugiat doloribus quasi quo iure officia.
-                        </p>
-                        <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur maxime ullam esse fuga blanditiis accusantium pariatur quis sapiente, veniam doloribus praesentium? Repudiandae iste voluptatem fugiat doloribus quasi quo iure officia.
-                        </p>
-                        <a href="#" class="btn btn-light text-primary rounded-pill py-3 px-5 mt-2">Read More</a>
+                        <p class="text-white mb-4">Vous êtes prêt à vivre une expérience inoubliable ? Ne cherchez pas plus loin ! Réservez dès maintenant votre prochain voyage avec VieXplore.
+                        </p> 
+
+                       
+                        <?php if(isset($filename)): ?>
+    <div class="flex justify-center" id="qrCodeContainer">
+        <img id="qrCodeImage" src="<?= $filename; ?>" alt="Qrcode"  loading="lazy" class="w-60">
+    </div>
+    
+    <!-- Placer le lien en dessous du code QR -->
+    <div class="flex justify-center">
+    <a id="downloadLink" href="<?= $filename; ?>" class="m-5 text-xl font-semibold text-center hover:text-purple-600 text-white" download> Télécharger votre qr code </a>
+</div>
+
+<?php endif ?>
+
+
+<script>
+    // Détecter le clic sur le lien de téléchargement
+    document.getElementById('downloadLink').addEventListener('click', function() {
+        // Masquer l'image du QR code
+        document.getElementById('qrCodeContainer').style.display = 'none';
+    });
+</script>
+
+            <?php if (isset($errors))  echo $errors; ?> 
+                               
                     </div>
                     <div class="col-lg-6">
                         <h1 class="text-white mb-3">Book A Tour Deals</h1>
@@ -184,13 +209,20 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
                             <div class="row g-3">
                             <div class="col-md-6">
     <div class="form-floating date" id="date3" data-target-input="nearest">
-        <select name="id_voyage" class="form-control bg-white border-0" oninput="change(this)">
+        <select id="destination" name="id_voyage" class="form-control bg-white border-0" oninput="change(this)">
             <option value="" disabled selected></option>
             <?php foreach ($voyages as $voyage) : ?>
                 <option value="<?php echo $voyage['id_voyage']; ?>"><?php echo $voyage['destination']; ?></option>
+                 <!-- La valeur de l'option est l'ID du voyage, le texte est la destination -->
             <?php endforeach; ?>
         </select>
-        <label for="id_voyage">Choississez votre destination:</label>
+        
+        <label for="id_voyage">Choisissez votre destination:</label>
+        <div>
+        <label id="destinationerror" style="color: orange;"></label>
+   <label id="destinationcorrect" style="color: white;"></label>
+            </div>
+
     </div>
 
     
@@ -198,30 +230,31 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-                                <input type="hidden" id="date_reservation" name="date_reservation" value="<?php echo date('Y-m-d'); ?>">
+        <input type="hidden" id="date_reservation" name="date_reservation" value="<?php echo date('Y-m-d'); ?>">
                                
-                                <div class="col-md-6">
+            <div class="col-md-6">
                                 
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
+            <div class="form-floating date" id="date3" data-target-input="nearest">
                                 
                                     
-                                    <input type="number" class="form-control bg-white border-0" oninput="change(this)" id="nombre_personnes"  name="nombre_personnes" placeholder="nombre_personnes" />
-                                        <label for="nombre_personnes">Nombre de Personnes:</label>
+             <input type="number" class="form-control bg-white border-0" oninput="change(this)" id="nombre_personnes"  name="nombre_personnes" placeholder="nombre_personnes" />
+              <label for="nombre_personnes">Nombre de Personnes:</label>
                     <div>
-                    <label id="nombre_personneserror" style="color: orange;"></label>
+    <label id="nombre_personneserror" style="color: orange;"></label>
    <label id="nombre_personnescorrect" style="color: white;"></label>
             </div>
             
                                     </div>
-                                </div>
+        </div>
                                 <center>
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" class="form-control bg-white border-0" id="numero_personne"  oninput="change(this)" name="numero_personne" placeholder="numero_personne" />
-                                        <label for="numero_personne">Numero de Personnes:</label>
+  <div class="col-md-6">
+ <div class="form-floating date" id="date3" data-target-input="nearest">
+<input type="text" class="form-control bg-white border-0" id="numero_personne"  oninput="change(this)" name="numero_personne" placeholder="numero_personne" />
+
+<label for="numero_personne">Numero de Personnes:</label>
 
                                    <div>
-                    <label id="numero_personneerror" style="color: orange;"></label>
+<label id="numero_personneerror" style="color: orange;"></label>
    <label id="numero_personnecorrect" style="color: white;"></label>
             </div>
                                         
@@ -233,15 +266,11 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
                                     <button class="btn btn-primary text-white w-100 py-3" type="submit">Reserver</button>
                                 </div>
                             </div>
+                            
+          
+        
                         </form>
-        <div class="code_qr">
-      <img class="qrious">
-     
-<div class="information">
-   <p style="color:blue"> Valeur:</p>
-   <p> Ici la valeur du code qr</p>
-</div>
-</div>
+                       
 
                     </div>
                 </div>
@@ -313,20 +342,10 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
 					
 					<!-- Translation Code End here -->
                                 <div class="col-xl-6">
-                                    <form>
-                                        <div class="form-floating">
-                                            <select class="form-select bg-dark border" id="select1">
-                                                <option value="1">USD</option>
-                                                <option value="2">EUR</option>
-                                                <option value="3">INR</option>
-                                                <option value="3">GBP</option>
-                                            </select>
-                                            <label for="select1">$</label>
-                                        </div>
-                                    </form>
+                                   
                                 </div>
                             </div>
-                            <h4 class="text-white mb-3">Payments</h4>
+                            
                             <div class="footer-bank-card">
                                 <a href="#" class="text-white me-2"><i class="fab fa-cc-amex fa-2x"></i></a>
                                 <a href="#" class="text-white me-2"><i class="fab fa-cc-visa fa-2x"></i></a>
@@ -421,6 +440,19 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
         numero_personnecorrect.textContent = "Correct.";
     }
 
+    var destination = document.getElementById("destination").value;
+    var destinationerror = document.getElementById("destinationerror");
+    var destinationcorrect = document.getElementById("destinationcorrect");
+
+    destinationcorrect.textContent = '';
+    destinationerror.textContent = '';
+
+    if (destination === "") {
+        destinationerror.textContent = "La destination ne doit pas être vide.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    } else {
+        destinationcorrect.textContent = "Correct.";
+    }
 
     
 

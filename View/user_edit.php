@@ -64,9 +64,7 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
 <html lang="en">
 <head>
 <meta charset="utf-8">
-
-
-<title>user about me section - Bootdey.com</title>
+<title>Votre profile</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -146,8 +144,8 @@ section {
 
 
     .btn-dark-blue {
-        background-color:  #274472;; /* Couleur bleu foncé */
-        border-color: #274472;; /* Couleur de la bordure */
+        background-color:  #274472; /* Couleur bleu foncé */
+        border-color: #274472; /* Couleur de la bordure */
     }
 
     .btn-dark-blue:hover {
@@ -295,7 +293,7 @@ section {
             </div>
         </div>
         <!-- Header End -->
-        <form method="post" >
+        <form action="" method="post" id=form>
 <section class="bg-light">
 
 
@@ -316,31 +314,60 @@ section {
 <li class="mb-2 mb-xl-3 display-28">
   
 </li>
-<select name="id_voyage" class="form-control text-white border-15" oninput="change(this)" style="width: 300px; background-color: #2c3e50; color: white;">
+<select id="destination" name="id_voyage" class="form-control text-white border-15" oninput="change(this)" style="width: 300px; background-color: #2c3e50; color: white;">
     <option value="" disabled selected style="color: #41729F;">Choisissez une destination</option>
     <?php foreach ($voyages as $voyage) : ?>
         <option value="<?php echo $voyage['id_voyage']; ?>" style="background-color: #2c3e50; color: white;"><?php echo $voyage['destination']; ?></option>
     <?php endforeach; ?>
 </select>
+<div>
+        <label id="destinationerror" style="color: orange;"></label>
+   <label id="destinationcorrect" style="color: #274472;"></label>
+            </div>
 <br>
 
 <li  class="mb-2 mb-xl-3 display-28" ><span class="display-26 text-secondary me-2 font-weight-600" >Date de creation:</span> <?php echo $row["date_reservation"] ?> </li>
 
 <li class="mb-2 mb-xl-3 display-28">
+
+
     <span class="display-26 text-secondary me-2 font-weight-600">Nombre de personne:</span>
+    
 </li>
-<input type="number" class="form-control" style="width: 300px;" name="nombre_personnes" value="<?php echo $row['nombre_personnes'] ?>">
+
+     <input type="number" class="form-control" style="width: 300px;" name="nombre_personnes" id="nombre_personnes" value="<?php echo $row['nombre_personnes'] ?>">
+
+     <div>
+    <label id="nombre_personneserror" style="color: orange;"></label>
+   <label id="nombre_personnescorrect" style="color: #274472;"></label>
+     </div>
+            
 <li class="display-28">
     <span class="display-26 text-secondary me-2 font-weight-600">Phone:</span>
 </li>
-<input type="number" class="form-control" style="width: 300px;" name="numero_personne" value="<?php echo $row['numero_personne'] ?>">
-
+<input type="number" class="form-control" style="width: 300px;" name="numero_personne" id="numero_personne"value="<?php echo $row['numero_personne'] ?>">
+<div>
+<label id="numero_personneerror" style="color: orange;"></label>
+   <label id="numero_personnecorrect" style="color: #274472;"></label>
+            </div>
         <br>
        
 </ul>
 
 <button type="submit" class="btn btn-primary btn-dark-blue" name="submit">Update</button>
 <a href="user.php" class="btn btn-primary btn-dark-blue">Cancel</a>
+
+
+<script>
+    // Détecter le clic sur le lien de téléchargement
+    document.getElementById('downloadLink').addEventListener('click', function() {
+        // Masquer l'image du QR code
+        document.getElementById('qrCodeContainer').style.display = 'none';
+    });
+</script>
+
+            <?php if (isset($errors))  echo $errors; ?> 
+
     </form>
 
 </div>
@@ -348,6 +375,7 @@ section {
 </div>
 </div>
 </div>
+    </section>
       <!-- Footer Start -->
       <div class="container-fluid footer py-5">
             <div class="container py-5">
@@ -478,6 +506,70 @@ section {
 
 <!-- Template Javascript -->
 <script src="js/main.js"></script>
+
+
+<script>
+    document.getElementById("form").addEventListener("submit", function(e) {
+    var hasError = false; // Variable pour suivre si une validation a échoué
+
+
+   
+
+    var nombre_personnes = document.getElementById("nombre_personnes").value;
+    var nombre_personneserror = document.getElementById("nombre_personneserror");
+    var nombre_personnescorrect = document.getElementById("nombre_personnescorrect");
+
+    nombre_personnescorrect.textContent = '';
+    nombre_personneserror.textContent = '';
+
+    if (nombre_personnes > 10) {
+        nombre_personneserror.textContent = " Le nombre maximum de personnes est de 10.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    } else {
+        nombre_personnescorrect.textContent = "Correct.";
+    }
+
+
+
+
+    var numero_personne = document.getElementById("numero_personne").value;
+    var numero_personneerror = document.getElementById("numero_personneerror");
+    var numero_personnecorrect = document.getElementById("numero_personnecorrect");
+
+    numero_personnecorrect.textContent = '';
+    numero_personneerror.textContent = '';
+
+    if (numero_personne === "") {
+        numero_personneerror.textContent = "La numero ne doit pas être vide.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    } else {
+        numero_personnecorrect.textContent = "Correct.";
+    }
+
+    var destination = document.getElementById("destination").value;
+    var destinationerror = document.getElementById("destinationerror");
+    var destinationcorrect = document.getElementById("destinationcorrect");
+
+    destinationcorrect.textContent = '';
+    destinationerror.textContent = '';
+
+    if (destination === "") {
+        destinationerror.textContent = "La destination ne doit pas être vide.";
+        hasError = true; // Définir hasError à true si la validation échoue
+    } else {
+        destinationcorrect.textContent = "Correct.";
+    }
+
+    
+
+    // Empêcher la soumission du formulaire si une validation a échoué
+    if (hasError) {
+        e.preventDefault();
+    }
+});
+  </script>
+
+
 
 </body>
 </html>
