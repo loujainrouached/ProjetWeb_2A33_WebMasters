@@ -472,7 +472,7 @@ $data = $result['data'];
     // Créer le graphique circulaire
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'pie',
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [{

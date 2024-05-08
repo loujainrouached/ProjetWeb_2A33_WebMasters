@@ -116,7 +116,7 @@ $tab = $functions->listGuide();
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
                             <a href="index1.html" class="nav-item nav-link active">Home</a>
-                            <a href="about.html" class="nav-item nav-link">About</a>
+                            <a href="Pays.php" class="nav-item nav-link">Pays</a>
                             <a href="services.html" class="nav-item nav-link">Reclamation</a>
                             <a href="blog.html" class="nav-item nav-link">Blog</a>
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
