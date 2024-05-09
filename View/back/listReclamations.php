@@ -163,7 +163,7 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="index.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Reclamations</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -319,18 +319,27 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
             
     </div>
     </div>
+           
             <!-- Recent Sales End -->
             <?php
+             require_once 'censor.php';
 $c = new ReclamationsC();
 $tab = $c->listReclamationsAdmin();
 
 ?>
 
             <?php
+              // Assuming $tab1 contains the comments, $article contains the current article, and $censoredWords is an array of words to censor
+              // Include the censorship function
+             // Define the array of censored words
+             
            if (is_array($tab) || is_object($tab))
            {
+           
         foreach ($tab as $Reclamations) 
-        {
+        { 
+            $censoredWords = ['marzouk', 'mariem', 'bessem'];
+            $contenu_censored= censorReclamation($Reclamations['contenu'], $censoredWords);
         ?>
             <!-- <table border="1" align="center" width="70%"> -->
             <tr>
@@ -338,7 +347,7 @@ $tab = $c->listReclamationsAdmin();
                 <td><?= $Reclamations['id_client']; ?></td>
                 <td><?= $Reclamations['date_reclamation']; ?></td>
                 <td><?= $Reclamations['titre_reclamation']; ?></td>
-                <td><?= $Reclamations['contenu']; ?></td>
+                <td><?= $contenu_censored; ?></td>
                 <td align="center">
                     <a href="deleteReclamations.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to delete this ?')">Delete</a>
                 </td>

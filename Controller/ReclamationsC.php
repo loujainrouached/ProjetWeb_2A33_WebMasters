@@ -3,6 +3,7 @@
 require __DIR__.'/../config.php';
 
 class ReclamationsC
+
 {
     public function listReclamationsAdmin()
     {
@@ -133,7 +134,7 @@ class ReclamationsC
         }
     }
 
-    
+
     public function afficheReponse($id_reclamation) {
         try  {
             $pdo = new PDO("mysql:host=localhost;dbname=reclamations", "root", ""); // Replace with your connection details
