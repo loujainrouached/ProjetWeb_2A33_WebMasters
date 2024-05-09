@@ -27,15 +27,22 @@ if (
             $_POST['id_client'],
             $_POST['date_reclamation'],
             $_POST['titre_reclamation'],
-            $_POST['contenu']
+            $_POST['contenu'],
+            0
             
         );
         $_SESSION["id_client"] = $_POST["id_client"];
         $ReclamationsC->addReclamations($Reclamations);
         header('Location: listReclamations.php');
+        
+
+// Renvoyez le nombre total de réclamations comme réponse
+echo $nombreReclamations;
+
 
     } else
         $error = "Missing information";
+        
 }
 ?>
 

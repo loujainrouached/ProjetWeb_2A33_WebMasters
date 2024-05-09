@@ -238,8 +238,6 @@ if("valider") {
             <!-- Footer Start -->
             
             <div class="form-container">
-               <button><a class="btn btn-primary w-100 py-3" href="listReclamations.php">Retourner au reclamations</a></button>   
-
                 <form action="" method="POST">
                     <div class="row g-3">
                    
@@ -263,10 +261,13 @@ if("valider") {
                         </div>
                         <div class="col-12">
                             <button class="btn btn-primary w-100 py-3" type="reset" value="Reset">Reset rep</button>
-                        </div>
                     </div>
-                </form>
             </div>
+                </form>
+
+            </div>
+            <a class="btn btn-outline-dark m-2" href="listReclamations.php" >Retourner à l'ajout des réponses</a> 
+
             
 
             <!-- Footer End -->

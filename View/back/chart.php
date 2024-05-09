@@ -1,33 +1,24 @@
 <?php
-require_once __DIR__.'/../../Controller/ReclamationsC.php';
-require_once __DIR__.'/../../Model/Reponses.php';
+require_once __DIR__.'/../../Controller/ReponsesC.php';
 
-$ReclamationsC = new ReclamationsC();
+var_dump($labels);
+var_dump($data);
 
 
 // Establish database connection (replace with your connection details)
 
 
-// Traitement du formulaire (form processing)
-if ($_SERVER["REQUEST_METHOD"] == "POST") 
-{
-  if (isset($_POST['id_reclamation']) && isset($_POST['search'])) 
-    {
-      $id_reclamation = $_POST['id_reclamation'];
-      $list = $ReclamationsC->afficheReponse($id_reclamation); // Pass $pdo for connection
-      // Further processing here...
-    }
-}
-  
-$Reclamations = $ReclamationsC->afficheReclamation();
+
+
 
 ?>
-  <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Recherche reponse</title>
+    <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -53,48 +44,6 @@ $Reclamations = $ReclamationsC->afficheReclamation();
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-    <style>
-/* Style pour agrandir le champ de sélection */
-
-#id_reclamation {
-  width: 300px; /* Vous pouvez ajuster cette valeur selon vos besoins */
-}
-
-body {
-    background-color: white; /* Couleur de fond de la page */
-    color: white; /* Couleur de texte générale */
-}
-
-h4, h5, h6 {
-    color: #778899; /* Couleur des titres */
-}
-
-label {
-    color: black; /* Couleur des libellés */
-}
-
-select, input[type="submit"] {
-    background-color: #F6E6D1; /* Couleur de fond des champs de sélection et du bouton */
-    color: turquoise; /* Couleur du texte des champs de sélection et du bouton */
-    border: none; /* Supprimer les bordures */
-    padding: 5px 10px; /* Ajouter un peu de rembourrage */
-    border-radius: 5px; /* Ajouter un peu de bord arrondi */
-}
-
-select:hover, input[type="submit"]:hover {
-    background-color: lightyellow; /* Couleur de fond au survol des champs de sélection et du bouton */
-}
-
-ul {
-    list-style-type: none; /* Supprimer les puces de la liste */
-}
-
-li {
-    margin-bottom: 50px; /* Ajouter de l'espace entre les éléments de la liste */
-}
-</style>
-
-
 </head>
 
 <body>
@@ -137,14 +86,14 @@ li {
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
                     <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                    <a href="chart.html" class="nav-item nav-link active"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="signin.html" class="dropdown-item">Sign In</a>
                             <a href="signup.html" class="dropdown-item">Sign Up</a>
                             <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item active">Blank Page</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
                         </div>
                     </div>
                 </div>
@@ -160,8 +109,12 @@ li {
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
-               
-                
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" type="search" placeholder="Search">
+                </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -242,44 +195,14 @@ li {
             <!-- Navbar End -->
 
 
-            <!--RECHERCHE START  -->
-            <div class="container py-5">
-              <div class="mx-auto text-center mb-5" style="max-width: 300px;">
-                <h4 class="section-title px-3">Recherche de reponse par ID reclamation </h4>
-              </div>
-            </div>
-    <form action="" method="POST">
-    <label for="id_reclamation">Sélectionnez un id_reclamation :</label>
-<select name="id_reclamation" id="id_reclamation">
-  <?php
-  // Assuming $evaluations holds the retrieved IDEVAL data
-  foreach ($Reclamations as $Reclamations) {
-    echo '<option value="' . $Reclamations['id_reclamation'] . '">' . $Reclamations['id_reclamation'].  '</option>';
-  }
-  ?>
-</select>
+            <!-- Chart Start -->
+            
 
-      </select>
-      <input class="btn btn-outline-success m-2" type="submit" value="Rechercher" name="search">
-    </form>
-  
-    <?php if (isset($list)) { ?>
-      
-        <br>
-       <h5>Reponses correspondantes au id reclamation sélectionné :</h5>
-       <ul>
-           <?php foreach ($list as $Reponses) {?>
-                <li>
-                  <h6>*Date de la réponse : <?= $Reponses['date_reponse']?></h6>   
-                  <h6>*Contenu : <?= $Reponses['rep'] ?> </h6>
-                </li>
-                <?php } ?>
-         
-          
-        
-        </ul>
-        <?php } ?>
-            <!-- RECHERCHE END -->
+
+                    
+                    
+              
+            <!-- Chart End -->
 
 
             <!-- Footer Start -->
@@ -309,21 +232,3 @@ li {
 </body>
 
 </html>
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <title>Recherche de reponse</title>
-    
-
-
-
- 
-  </head>
-  <body>
-    
-        
-      
-    
-    
-  </body>
-  </html>

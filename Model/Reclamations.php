@@ -7,14 +7,16 @@ class Reclamations
     private ?string $date_reclamation = null;
     private ?string $titre_reclamation = null;
     private ?string $contenu = null;
+    private ?string $vue_par_admin = null;
 
-    public function __construct($id_reclamation,$id_client,$date_reclamation,$titre_reclamation,$contenu)
+    public function __construct($id_reclamation,$id_client,$date_reclamation,$titre_reclamation,$contenu,$vue_par_admin)
     {
         $this->id_reclamation= $id_reclamation;
         $this->id_client= $id_client;  
         $this->date_reclamation=$date_reclamation;
         $this->titre_reclamation=$titre_reclamation;
         $this->contenu= $contenu;
+        $this->vue_par_admin= $vue_par_admin;
     }
 
 
@@ -33,6 +35,18 @@ class Reclamations
     public function setIdClient($id_client)
     {
         $this->id_client= $id_client;
+
+        return $this;
+    }
+    public function getVueParAdmin()
+    {
+        return $this->vue_par_admin;
+    }
+
+
+    public function setVueParAdmin($vue_par_admin)
+    {
+        $this->vue_par_admin= $vue_par_admin;
 
         return $this;
     }

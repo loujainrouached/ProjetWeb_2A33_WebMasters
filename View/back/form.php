@@ -37,6 +37,99 @@ $tab = $c->listReponses();
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <style>
+        /* Orange pastel background color */
+        
+
+        /* Styles for the table */
+        table {
+            border-collapse: collapse;
+            width: 70%;
+            margin: 20px auto; /* Center the table */
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #FFA500;
+        }
+
+        /* Styles for the headings */
+        h1,
+        h2 {
+            text-align: center;
+            color: #25BDC4; /* Orange Red color for headings */
+        }
+
+        /* Link style for '' */
+        a {
+            text-decoration: none;
+            color: #25BDC4;
+        }
+
+        /* Link style for ' */
+        .delete-link {
+            color: red;
+            text-decoration: none;
+        }
+
+        /* Update button style */
+        input[type="submit"] {
+            background-color: #FFA500;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .table {
+    background-color: #F6E6D1;
+}
+
+.table th,
+.table td {
+    background-color: #F6E6D1;
+}
+
+.table th {
+    border-color: #FFA500;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border-color: #F6E6D1;
+}
+    </style>
+        <style>
+/* Style pour agrandir le champ de sélection */
+
+#id_reclamation {
+  width: 300px; /* Vous pouvez ajuster cette valeur selon vos besoins */
+}
+</style>
+<style>
+.rounded-label {
+    border-radius:2em;   /* Pour arrondir les coins */
+    background-color: #f0f0f0; /* Couleur de fond */
+    padding: 5px 10px; /* Espacement intérieur pour le texte */
+    display: inline-block; /* Pour que le padding s'applique correctement */
+}
+
+        </style>
+    <style>
+.rounded-label {
+    border-radius:2em;   /* Pour arrondir les coins */
+    background-color: #f0f0f0; /* Couleur de fond */
+    padding: 5px 10px; /* Espacement intérieur pour le texte */
+    display: inline-block; /* Pour que le padding s'applique correctement */
+}
+
+        </style>
 </head>
 
 <body>
@@ -189,18 +282,27 @@ $tab = $c->listReponses();
 
 
             <!-- Form Start -->
-            <button><a class="btn btn-primary w-100 py-3" href="addReponse.php">Retourner à l'ajout des réponses</a></button>   
+             
             <div class="container-fluid pt-4 px-4">
-            <div class="container-fluid pt-4 px-4">
+            <!-- <div class="container-fluid pt-4 px-4"> -->
                 
+            <div class="container py-5">
+            <div class="mx-auto text-center mb-5" style="max-width: 900px;">
                 
-                
-                <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h5 class="section-title px-3" align="center">LISTE DES REPONSES</h5>
+                <!-- <div class="d-flex align-items-center justify-content-between mb-4"> -->
+                    <h4 class="section-title px-3" align="center">LISTE DES REPONSES</h4>
                     <a href="">Show All</a>
                 </div>
+                <form id="searchForm">
+                
+    <input type="text" id="searchInput" class="rounded-label" placeholder="Search...">
+    <button type="submit"class="btn btn-outline-success m-2">Search</button>
+</form>
+
             <div class="table-responsive">
-                <table class="table text-start align-middle table-bordered table-hover mb-0" >
+                <table class="table text-start align-middle table-bordered table-hover mb-0"  id="reponsesTable" >
+    <!-- Contenu de votre tableau -->
+
                     
                   <tr>
                     
@@ -242,6 +344,7 @@ $tab = $c->listReponses();
               }
               ?>
              </table>
+             <a class="btn btn-outline-dark m-2" href="addReponse.php" >Retourner à l'ajout des réponses</a> 
                 
                     
                     
@@ -259,6 +362,77 @@ $tab = $c->listReponses();
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+    <script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Empêche la soumission du formulaire
+
+        var searchTerm = document.getElementById('searchInput').value.toLowerCase(); // Récupère la valeur saisie dans le champ de recherche
+        var tableRows = document.getElementById('reponsesTable').getElementsByTagName('tr'); // Récupère toutes les lignes du tableau
+
+        // Parcours toutes les lignes du tableau sauf la première (en-têtes)
+        for (var i = 1; i < tableRows.length; i++) {
+            var row = tableRows[i];
+            var rowData = row.getElementsByTagName('td'); // Récupère les données de chaque cellule de la ligne
+
+            var rowVisible = false; // Indique si la ligne doit être affichée ou non
+
+            // Parcours les données de chaque cellule de la ligne
+            for (var j = 0; j < rowData.length; j++) {
+                var cellData = rowData[j].textContent.toLowerCase(); // Récupère le texte de la cellule en minuscules
+
+                // Si le texte de la cellule contient le terme de recherche, la ligne doit être affichée
+                if (cellData.includes(searchTerm)) {
+                    rowVisible = true;
+                    break; // Sort de la boucle interne si le terme est trouvé dans une cellule
+                }
+            }
+
+            // Affiche ou masque la ligne en fonction du résultat de la recherche
+            if (rowVisible) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+</script>
+<script>
+    // Fonction pour trier le tableau en fonction de la colonne spécifiée
+    function sortTable(columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("reponsesTable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+
+    // Ajoute un gestionnaire d'événements à chaque en-tête de colonne
+    window.onload = function() {
+        var headers = document.querySelectorAll("#reponsesTable th");
+        headers.forEach(function(header, index) {
+            header.addEventListener("click", function() {
+                sortTable(index);
+            });
+        });
+    };
+</script>
+
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

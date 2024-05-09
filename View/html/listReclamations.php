@@ -151,6 +151,7 @@ $tab = $c->listReclamations();
 
 
     <?php
+    if (is_array($tab) || is_object($tab)){
     foreach ($tab as $Reclamations) {
         if (isset($_SESSION["id_client"]) and $Reclamations["id_client"] == $_SESSION["id_client"]) {
         // if ($Reclamations["id_client"] == 45) {
@@ -181,7 +182,7 @@ $tab = $c->listReclamations();
             </td>
         </tr>
     <?php
-    }}
+    }}}
     ?>
     </table>
 

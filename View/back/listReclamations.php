@@ -3,6 +3,7 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
 
 
 
+
 // Establish database connection (replace with your connection details)
 
 
@@ -41,6 +42,9 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chunks/core.chunk.css" rel="stylesheet">
+<!-- <  script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chunks/core.chunk.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <style>
         /* Orange pastel background color */
         body {
@@ -120,6 +124,16 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
   width: 300px; /* Vous pouvez ajuster cette valeur selon vos besoins */
 }
 </style>
+<style>
+.rounded-label {
+    border-radius:2em;   /* Pour arrondir les coins */
+    background-color: #f0f0f0; /* Couleur de fond */
+    padding: 5px 10px; /* Espacement intérieur pour le texte */
+    display: inline-block; /* Pour que le padding s'applique correctement */
+}
+
+        </style>
+
 </head>
 
 <body>
@@ -153,15 +167,15 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Reclamations</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.php" class="dropdown-item">Buttons</a>
-                            <a href="typography.php" class="dropdown-item active">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                            
+                            <a href="form.php" class="dropdown-item active">Reponses</a>
+                            
                         </div>
                     </div>
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
                     <a href="form.php" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                    <a href="chart.php" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -276,15 +290,21 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
            <div class="content">
             <!-- Recent Sales Start -->
         <div class="container-fluid contact bg-light py-5">
-          <a href="searchReponse.php" class="btn btn-outline-success m-2">CHERCHER</a>
+          <!-- <a href="searchReponse.php" class="btn btn-outline-success m-2">CHERCHER</a> -->
           <!-- <button type="button" class="btn btn-outline-success m-2">Success</button -->
         <div class="container py-5">
             <div class="mx-auto text-center mb-5" style="max-width: 900px;">
                 <h5 class="section-title px-3">Liste des réclamations</h5>
                 <a href="">Show All</a>
+                
+                <form id="searchForm">
+                
+    <input type="text" id="searchInput" class="rounded-label" placeholder="Search...">
+    <button type="submit"class="btn btn-outline-success m-2">Search</button>
+</form>
             </div>
                     <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0" id="reponsesTable">
                             
                         <tr>
                         <th>Id reclamation</th>
@@ -302,14 +322,17 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
             <!-- Recent Sales End -->
             <?php
 $c = new ReclamationsC();
-$tab = $c->listReclamations();
+$tab = $c->listReclamationsAdmin();
 
 ?>
 
             <?php
-        foreach ($tab as $Reclamations) {
+           if (is_array($tab) || is_object($tab))
+           {
+        foreach ($tab as $Reclamations) 
+        {
         ?>
-
+            <!-- <table border="1" align="center" width="70%"> -->
             <tr>
                 <td><?= $Reclamations['id_reclamation']; ?></td>
                 <td><?= $Reclamations['id_client']; ?></td>
@@ -325,23 +348,145 @@ $tab = $c->listReclamations();
                 </td>
             </tr>
                  <?php
-                  }
+                  }}
                   ?>
        
                 </table>
+                </div>
+               <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+               <?php
+              $result = $c->getReponses();
+
+             // Obtenez les labels et les données de réservation
+             $labels = $result['labels'];
+             $data = $result['data'];
+             ?>
+            <div style="width: 70%">
+              <canvas id="myChart"></canvas>
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+                <script>
                 
-                    
-               
+                    // Préparer les données pour le graphique
+                    var labels = <?php echo json_encode($labels); ?>;
+                    var data = <?php echo json_encode($data); ?>;
+
+                    // Créer le graphique circulaire
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Nombre reponses par reclamation',
+                                data: data,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            aspectRatio: 1, // Pour s'assurer que le graphique est un cercle
+                            scales: {
+                                y: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                </script>
+                
 
 
-            <!-- Widgets Start -->
-            
-        <!-- Content End -->
+              
+                  
+        <script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Empêche la soumission du formulaire
+
+        var searchTerm = document.getElementById('searchInput').value.toLowerCase(); // Récupère la valeur saisie dans le champ de recherche
+        var tableRows = document.getElementById('reponsesTable').getElementsByTagName('tr'); // Récupère toutes les lignes du tableau
+
+        // Parcours toutes les lignes du tableau sauf la première (en-têtes)
+        for (var i = 1; i < tableRows.length; i++) {
+            var row = tableRows[i];
+            var rowData = row.getElementsByTagName('td'); // Récupère les données de chaque cellule de la ligne
+
+            var rowVisible = false; // Indique si la ligne doit être affichée ou non
+
+            // Parcours les données de chaque cellule de la ligne
+            for (var j = 0; j < rowData.length; j++) {
+                var cellData = rowData[j].textContent.toLowerCase(); // Récupère le texte de la cellule en minuscules
+
+                // Si le texte de la cellule contient le terme de recherche, la ligne doit être affichée
+                if (cellData.includes(searchTerm)) {
+                    rowVisible = true;
+                    break; // Sort de la boucle interne si le terme est trouvé dans une cellule
+                }
+            }
+
+            // Affiche ou masque la ligne en fonction du résultat de la recherche
+            if (rowVisible) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+</script>
+<script>
+    // Fonction pour trier le tableau en fonction de la colonne spécifiée
+    function sortTable(columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("reponsesTable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+
+    // Ajoute un gestionnaire d'événements à chaque en-tête de colonne
+    window.onload = function() {
+        var headers = document.querySelectorAll("#reponsesTable th");
+        headers.forEach(function(header, index) {
+            header.addEventListener("click", function() {
+                sortTable(index);
+            });
+        });
+    };
+</script>
 
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
    
 
     <!-- JavaScript Libraries -->
@@ -357,6 +502,8 @@ $tab = $c->listReclamations();
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    </div>
+    </div>  
 </body>
 
 </html>

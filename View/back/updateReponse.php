@@ -8,7 +8,7 @@ $ReponsesC = new ReponsesC();
  // Replace 'id_reclamation_value' with the actual field name
 
 
-var_dump($_POST);
+// var_dump($_POST);    
 
 if (
     isset($_POST["date_reponse"]) &&

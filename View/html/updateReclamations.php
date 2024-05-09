@@ -28,7 +28,8 @@ if (isset($_POST["date_reclamation"]) &&
                 $_POST['id_client'],
                 $_POST['date_reclamation'],
                 $_POST['titre_reclamation'],
-                $_POST['contenu']
+                $_POST['contenu'],
+                0
             );
         
             $ReclamationsC->updateReclamation($Reclamations, $id_reclamation);
@@ -204,7 +205,7 @@ if (isset($_POST["date_reclamation"]) &&
                 </div>
                 <div class="col-12">
                     <div class="form-floating">
-                        <textarea class="form-control border-2" placeholder="Leave a message here" id="contenu"   name="contenu"value="<?= $Reclamations['contenu'] ?>"></textarea>
+                        <textarea  class="form-control border-2" placeholder="Leave a message here" id="contenu"   name="contenu"><?= $Reclamations['contenu'] ?></textarea>
                         <label for="contenu">Contenu</label>
                         <span id="erreurContenu" style="color:red"></span>
                     </div>
