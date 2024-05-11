@@ -20,15 +20,15 @@ if(isset($_POST['title'])){
         $res = $stmt->execute([$title]);
 
         if($res){
-            header("Location: ../voyage_back.php?mess=success"); 
+            header("Location: ../reservation_back.php?mess=success"); 
             exit(); // Arrêter l'exécution du script après la redirection
         } else {
-            header("Location: ../voyage_back.php.php");
+            header("Location: ../reservation_back.php");
             exit(); // Arrêter l'exécution du script après la redirection
         }
     }
 } else {
-    header("Location: ../voyage_back.php?mess=error");
+    header("Location: ../reservation_back.php?mess=error");
     exit(); // Arrêter l'exécution du script après la redirection
 }
 ?>
