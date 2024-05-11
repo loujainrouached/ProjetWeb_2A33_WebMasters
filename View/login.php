@@ -45,7 +45,8 @@ else {
                 );
             
     $user2 -> addlogin($user);
-
+    header("Location: Connexion.php");
+    exit(); // Assure que le script s'arrête après la redirection
 }
 }
 }

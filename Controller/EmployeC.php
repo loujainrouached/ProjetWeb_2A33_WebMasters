@@ -15,6 +15,30 @@ class UserC
 
         return $user; // Retourne l'utilisateur trouvé ou null s'il n'existe pas
     }
+
+    
+    public function updateMdp($hashed_password, $hashed_password1, $id)
+    {
+        try {
+            $db = config::getConnexion();
+                
+            $query = $db->prepare('UPDATE table_users SET 
+                mdp = :mdp, 
+                confirm_mdp = :confirm_mdp
+                WHERE id_user = :id_user');
+    
+            $query->execute([
+                'id_user' => $id,
+                'mdp' => $hashed_password,
+                'confirm_mdp' => $hashed_password1
+            ]);
+    
+            echo $query->rowCount() . " records UPDATED successfully <br>";
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+    
     public function updateUser($user, $id)
 {
     try {
@@ -90,6 +114,10 @@ public function loginUser1($email)
 
         // Check if user exists and password matches
         if ($user ) {
+          //  session_start();
+            
+            // Stocker les informations de l'utilisateur dans la session
+          $_SESSION['id_user'] = $user['id_user']; 
             // Vérification du type d'utilisateur après une connexion réussie
          
             // Retourner true si la connexion est réussie
@@ -135,6 +163,7 @@ public function loginUser($email, $mdp)
         die('Error:' . $e->getMessage());
     }
 }
+
 /*public function loginUser($email, $mdp)
 {
     $sql = "SELECT * FROM table_users WHERE email_user = :email_user";

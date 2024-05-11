@@ -1,58 +1,33 @@
 <?php
 include '../Controller/EmployeC.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-require 'PHPMailer/src/Exception.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 $userC = new UserC();
-
- $randomCode = $userC->generateRandomCode();
- 
- function sendMail($email, $randomCode)
- {
-    $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = MAILHOST;
-        $mail->SMTPAuth = true;
-        $mail->Username = USERNAME;
-        $mail->Password = PASSWORD;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587 ;  
-        $mail->setFrom(SEND_FROM, SEND_FROM_NAME);
-        $mail->addAddress($email);
-        $mail->addReplyTo(REPLY_TO, REPLY_TO_NAME);
-        $mail->isHTML(true);
-        $mail->Body = $randomCode;
-        if(!$mail->send())
-        {
-            return "not send";
-        }else{
-            return "success";
-        }
- }
-
+ session_start();
 // Initialisation du message
 $message = '';
+$message1 = '';
+$randomCode = $_SESSION['randomCode'];
+$email = $_SESSION['email'];
+$id_user = $_SESSION['id_user']; 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
+    $message1 = "";
     // Récupérer l'email et le mot de passe soumis depuis le formulaire
     $code = $_POST["code"];
+   
     if (empty($code) ) {
         $message = "champ manquant";
     } else {
     $userC = new UserC();
-    if ($userC->loginUser1($email)) {
-   $message = "Code valide";
- 
+  
+    if ($code === $randomCode) {
+        // Le code saisi est correct, vous pouvez effectuer les actions nécessaires ici
+        $message = "Le code est correct. de : $email  d id : $id_user";
+        header("Location: update_mdp.php");
     } else {
-        $message = "code invalide ,verifier votre code.";
-    }
-}
-}
+        // Le code saisi est incorrect
+        $message = "code invalide ,verifier votre code..";
+           }
+}}
 ?>
 
 <!DOCTYPE html>
@@ -271,6 +246,10 @@ body {
     </div>
 <div class="container" >
     <h2>Consulter Votre Boite E-mail  :</h2>
+    <?php if (!empty($message1)) : ?>
+        <!-- Affichage du message -->
+        <p class="message"><?php echo $message1; ?></p>
+    <?php endif; ?>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <div class="mb-3">
             <label for="code">votre code :</label>

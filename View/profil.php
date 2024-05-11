@@ -187,6 +187,7 @@ if(isset($_SESSION['id_user'])) {
 
     // Récupérer les informations de l'utilisateur à partir de la base de données en utilisant l'ID stocké dans la session
     $userId = $_SESSION['id_user'];
+  //  $nom_user = $_SESSION['nom_user']; 
     $sql = "SELECT * FROM table_users WHERE id_user = :id_user";
     $query = $db->prepare($sql);
     $query->execute(['id_user' => $userId]);

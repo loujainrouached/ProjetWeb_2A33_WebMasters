@@ -1,87 +1,33 @@
 <?php
 include '../Controller/EmployeC.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-require 'PHPMailer/src/Exception.php';
-session_start();
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 $userC = new UserC();
-
- $randomCode = $userC->generateRandomCode();
- $_SESSION['randomCode'] = $randomCode;
- function sendMail($email, $randomCode)
- {
-    $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = MAILHOST;
-        $mail->SMTPAuth = true;
-        $mail->Username = USERNAME;
-        $mail->Password = PASSWORD;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587 ;
-        $mail->setFrom(SEND_FROM, SEND_FROM_NAME);
-        $mail->addAddress($email);
-        $mail->addReplyTo(REPLY_TO, REPLY_TO_NAME);
-        $mail->isHTML(true);
-        $mail->Body = $randomCode;
-        if(!$mail->send())
-        {
-            return "not send";
-        }else{
-            return "success";
-        }
- }
-
+ session_start();
 // Initialisation du message
 $message = '';
-//$showVerificationForm = false;
-
-//$codeSaisi = $_POST["code"];
-
-
+$id_user = $_SESSION['id_user']; 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
-    // Récupérer l'email et le mot de passe soumis depuis le formulaire
-    $email = $_POST["email"];
-    if (empty($email) ) {
-        $message = "champ manquant. Veuillez remplir le champ.";
-    } else {
-    $userC = new UserC();
-    if ($userC->loginUser1($email)) {
-   //echo "Email stocké dans la session : " . $_SESSION['email'];
-   $response = sendMail($email, $randomCode);
-   if ($response === "success") {
-    $message = "le code envoye: $randomCode ";
-   
-    header("Location: verif_code.php");
-    exit;
-    //$showVerificationForm = true; // Afficher le formulaire de vérification
+    if (empty($_POST["mdp"]) && empty($_POST["confirm_mdp"])) {
+        $message = "champ manquant";
+    } else if ($_POST["mdp"] !== $_POST["confirm_mdp"]) {
+        $message = "Les mots de passe ne correspondent pas.";
+    } 
+    else {
+        // Créer un objet utilisateur avec les nouveaux mots de passe
+        $user = new UserC();
+       $pwd=$_POST['mdp'];
+      $pwd1=$_POST['confirm_mdp'];
+      $hashed_password = password_hash($pwd,PASSWORD_DEFAULT);
+      $hashed_password1 = password_hash($pwd1,PASSWORD_DEFAULT);
+        $userC->updateMdp($hashed_password, $hashed_password1, $id_user);
+        // Affichage d'un message de succès ou d'erreur
+        $message = "Mot de passe mis à jour avec succès.";
+        header("Location: Connexion.php");
     }
-    } else {
-        $message = "Adresse e-mail n existe pas.";
+
+
     }
-}
-/*if (!empty($codeSaisi)) {
-    $showVerificationForm = true;
- 
-    // Vérifier si le code saisi correspond au code envoyé par email
-    if ($codeSaisi === $randomCode) {
-        // Le code saisi est correct, vous pouvez effectuer les actions nécessaires ici
-        $message = "Le code est correct.";
-    } else {
-        // Le code saisi est incorrect
-        $message = "Le code saisi est incorrect.";
-    }
-} else {
-    // Le champ du code est vide
-    $message = "Veuillez saisir le code.";
-}
-*/
-}
+    
 ?>
 
 <!DOCTYPE html>
@@ -299,22 +245,20 @@ body {
 
     </div>
 <div class="container" >
-
-    <h2>Oubliè mot de passe :</h2>
+    <h2>Mise a jour de Mot de Passe  :</h2>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <div class="mb-3">
-            <label for="email">Adresse e-mail :</label>
-            <input type="email" id="email" name="email" placeholder="entrer L'adresse mail" value="<?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?>">
-       
+            <label for="mdp">Nouveau Mot de Passe:</label>
+            <input type="password" id="mdp" name="mdp" placeholder="entrer Le nouveau mot de passe">
+            <label for="confirm_mdp">confirm Mot de Passe:</label>
+            <input type="password" id="confirm_mdp" name="confirm_mdp" placeholder="verifier Le nouveau mot de passe">
         </div>
-     
-        <button type="submit">Continuer</button>
+        <button type="submit">Modifier</button>
     </form>
     <?php if (!empty($message)) : ?>
         <!-- Affichage du message -->
         <p class="message"><?php echo $message; ?></p>
     <?php endif; ?>
-   
 </div>
 <!-- Barre de navigation en bas -->
 <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark">

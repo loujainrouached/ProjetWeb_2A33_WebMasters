@@ -3,6 +3,7 @@ require_once('lib/tcpdf/tcpdf.php');
 
 include "../Controller/EmployeC.php";
 session_start();
+
 $user1 = new UserC();
 
     /*
@@ -101,7 +102,8 @@ if (isset($_POST['nature']) && !empty($_POST['nature'])) {
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                    <h6 class="mb-0">loj</h6>
+                     
                         <span>Admin</span>
                     </div>
                 </div>
@@ -222,6 +224,7 @@ if (isset($_POST['nature']) && !empty($_POST['nature'])) {
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">John Doe</span>
+                  
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="profil.php" class="dropdown-item">My Profile</a>

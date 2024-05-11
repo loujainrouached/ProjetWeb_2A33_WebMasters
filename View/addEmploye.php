@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         null,
         $_POST['nom_user'] ?? null,
         $_POST['prenom_user'] ?? null,
-        $_POST['email_user'] ?? null,
+        $_POST['email_user'] ?? null,         
         $hashed_password,
         $hashed_password1,
         $_POST['nature_user'],
