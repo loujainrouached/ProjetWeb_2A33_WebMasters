@@ -43,6 +43,40 @@ $tab = $c->listReponses();
 
          <!-- Template Stylesheet  -->
         <link href="css/style.css" rel="stylesheet">
+
+        <style>
+        table {
+    border-collapse: collapse;
+    width: 70%;
+    margin: auto; /* Centrer le tableau horizontalement */
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Couleur de fond pour les lignes impaires */
+}
+
+/* Style pour l'en-tête */
+th {
+    background-color: #87CEEB; /* Bleu ciel clair */
+    color: #ffffff; /* Texte blanc */
+}
+
+/* Style pour les liens dans le tableau */
+a {
+    color: blue; /* Couleur bleue pour les liens */
+    text-decoration: none; /* Supprimer le soulignement par défaut */
+}
+
+a:hover {
+    text-decoration: underline; /* Souligner au survol */
+}
+</style>
     </head>
 
     <body>
@@ -136,17 +170,17 @@ $tab = $c->listReponses();
             <div class="mx-auto text-center mb-5" style="max-width: 1000px;">
                 <div class="container py-5">
                 <
-                    <h1 class="mb-0">Les reponses a vos réclamations</h1>
+                    <h1 class="mb-0">Les réponses a vos réclamations</h1>
                 </div>
             </div>
         </div>
          <!-- Contact End  -->
          <table border="1" align="center" width="70%">
     <tr>
-        <th>Id reponse</th>
-        <th>date reponse</th>
-        <th>Reponse</th>
-        <th>id reclamation</th>
+        <th>ID REPONSE</th>
+        <th>DATE REPONSE</th>
+        <th>CONTENU REPONSE</th>
+        <th>ID RECLAMATION</th>
       
     </tr>
 

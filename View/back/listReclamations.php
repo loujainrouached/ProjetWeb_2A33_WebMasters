@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__.'/../../Controller/ReclamationsC.php';
+require_once __DIR__.'/../../Controller/ReponsesC.php';
+
 
 
 
@@ -303,62 +305,75 @@ require_once __DIR__.'/../../Controller/ReclamationsC.php';
     <button type="submit"class="btn btn-outline-success m-2">Search</button>
 </form>
             </div>
-                    <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0" id="reponsesTable">
-                            
+            <div class="container">
+    <div class="table-responsive">
+        <table class="table text-start align-middle table-bordered table-hover mb-0" id="reponsesTable">
+            <thead>
+                <tr>
+                    <th>Id réclamation</th>
+                    <th>Id client</th>
+                    <th>Date de réclamation</th>
+                    <th>Titre de réclamation</th>
+                    <th>Contenu</th>
+                    <th>Delete</th>
+                    <th>Réponses</th>
+                    <th>Ajouter une réponse</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                require_once 'censor.php';
+                $c = new ReclamationsC();
+                $tab = $c->listReclamationsAdmin();
+                if (is_array($tab) || is_object($tab)) {
+                    foreach ($tab as $Reclamations) {
+                        $censoredWords = ['marzouk', 'mariem', 'bessem'];
+                        $contenu_censored = censorReclamation($Reclamations['contenu'], $censoredWords);
+                ?>
                         <tr>
-                        <th>Id reclamation</th>
-                        <th>Id client</th>
-                        <th>Date de reclamation</th>
-                        <th>Titre de reclamation</th>
-                        <th>contenu</th>
-                        <th>Delete</th>
-                        <th>REPONSE</th>
-                            
-                </div>
-            
-    </div>
-    </div>
-           
-            <!-- Recent Sales End -->
-            <?php
-             require_once 'censor.php';
-$c = new ReclamationsC();
-$tab = $c->listReclamationsAdmin();
+                            <td><?= $Reclamations['id_reclamation']; ?></td>
+                            <td><?= $Reclamations['id_client']; ?></td>
+                            <td><?= $Reclamations['date_reclamation']; ?></td>
+                            <td><?= $Reclamations['titre_reclamation']; ?></td>
+                            <td><?= $contenu_censored; ?></td>
+                            <td>
+                                <a href="deleteReclamations.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to delete this ?')">Delete</a>
+                            </td>
+                            <td>
+                                <?php
+                                $reponses = new ReponsesC();
+                                // Utilisation de la méthode getReponses() pour récupérer les réponses associées à cette réclamation
+                                $reponses = $c->getReponsesForReclamation($Reclamations['id_reclamation']);
+                                if ($reponses)
+                                 {
+                                    foreach ($reponses as $reponse) {
+                                ?>
+                                        <div style="color: orange;">Réponse : </div>
+                                        <?= $reponse['rep']; ?>
+                                        <div style="color: orange;">Date : </div>
+                                        <?= $reponse['date_reponse']; ?>
+                                <?php
+                                    }
+                                } else {
+                                    echo "<div>Pas de réponse pour cette réclamation</div>";
+                                }
+                                ?>
+                            </td>
+                            <td><a href="addReponse.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to respond ?')">Ajouter une réponse</a></td>
 
-?>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
-            <?php
-              // Assuming $tab1 contains the comments, $article contains the current article, and $censoredWords is an array of words to censor
-              // Include the censorship function
-             // Define the array of censored words
-             
-           if (is_array($tab) || is_object($tab))
-           {
-           
-        foreach ($tab as $Reclamations) 
-        { 
-            $censoredWords = ['marzouk', 'mariem', 'bessem'];
-            $contenu_censored= censorReclamation($Reclamations['contenu'], $censoredWords);
-        ?>
-            <!-- <table border="1" align="center" width="70%"> -->
-            <tr>
-                <td><?= $Reclamations['id_reclamation']; ?></td>
-                <td><?= $Reclamations['id_client']; ?></td>
-                <td><?= $Reclamations['date_reclamation']; ?></td>
-                <td><?= $Reclamations['titre_reclamation']; ?></td>
-                <td><?= $contenu_censored; ?></td>
-                <td align="center">
-                    <a href="deleteReclamations.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to delete this ?')">Delete</a>
-                </td>
-                <td align="center">
-                   <a href="addReponse.php?id_reclamation=<?=$Reclamations['id_reclamation']; ?>"onclick="return confirm('Are you sure you want to respond ?')">Repondre</a>
-            
-                </td>
-            </tr>
-                 <?php
-                  }}
-                  ?>
+<!-- <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a> -->
+
        
                 </table>
                 </div>
@@ -371,7 +386,7 @@ $tab = $c->listReclamationsAdmin();
              $labels = $result['labels'];
              $data = $result['data'];
              ?>
-            <div style="width: 70%">
+            <div style="width:60%">
               <canvas id="myChart"></canvas>
                     </div>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
@@ -388,7 +403,7 @@ $tab = $c->listReclamationsAdmin();
                         data: {
                             labels: labels,
                             datasets: [{
-                                label: 'Nombre reponses par reclamation',
+                                label: 'NOMBRE DE REPONSES PAR RECLAMATION',
                                 data: data,
                                 backgroundColor: [
                                     'rgba(255, 99, 132, 0.2)',
@@ -417,6 +432,7 @@ $tab = $c->listReclamationsAdmin();
                                     display: false
                                 }
                             }
+                            
                         }
                     });
                 </script>

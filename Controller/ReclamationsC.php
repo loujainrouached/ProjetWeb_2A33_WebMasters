@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/../config.php';
+require_once __DIR__.'/../config.php';
 
 class ReclamationsC
 
@@ -226,6 +226,22 @@ public function listUnreadReclamationsAdmin()
         die('Error:' . $e->getMessage());
     }
 }
+public function getReponsesForReclamation($id_reclamation)
+{
+    $sql = "SELECT * FROM reponses WHERE id_reclamation=:id_reclamation";
+    $db = config::getConnexion();
+    try {
+        $query = $db->prepare($sql);
+        $query->execute(['id_reclamation' => $id_reclamation]);
+        $reponses = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $reponses;
+    } catch (PDOException $e) {
+        // Log or handle the error appropriately
+        echo $e->getMessage();
+        return []; // Retourne un tableau vide en cas d'erreur
+    }
+}
+
 
 
 

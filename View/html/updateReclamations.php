@@ -6,7 +6,7 @@ $error = "";
 $Reclamations = null;
 $ReclamationsC = new ReclamationsC();
 
-var_dump($_POST);
+// var_dump($_POST);
 
 if (isset($_POST["date_reclamation"]) &&
     isset($_POST["titre_reclamation"])&&
@@ -167,9 +167,11 @@ if (isset($_POST["date_reclamation"]) &&
 
 
     <?php
-        if (isset($_POST["id_reclamation"])) {
-            $Reclamations = $ReclamationsC->showReclamations($_POST["id_reclamation"]);
+        if (isset($_GET["id_reclamation"])) 
+        {
+            $Reclamations = $ReclamationsC->showReclamations($_GET["id_reclamation"]);
         } 
+        if ($Reclamations !== null) {
     ?>
     <div class="form-container">
         <form action="" method="POST">
@@ -177,7 +179,7 @@ if (isset($_POST["date_reclamation"]) &&
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="number" class="form-control border-2" id="id_reclamation" placeholder="Reclamation Id" name="id_reclamation"disable value="<?= $Reclamations['id_reclamation'] ?>"readonly>
+                        <input type="number" class="form-control border-2" id="id_reclamation" placeholder="Reclamation Id" name="id_reclamation" value="<?= $Reclamations['id_reclamation'] ?>"readonly>
                         <label for="id_reclamation">Reclamation Id</label>
                                         
                     </div>
@@ -219,6 +221,11 @@ if (isset($_POST["date_reclamation"]) &&
             </div>
         </form>
     </div>
+    <?php
+} else {
+    echo "Reclamation not found."; // Afficher un message si les données de réclamation ne sont pas trouvées
+}
+?>
     
 
 

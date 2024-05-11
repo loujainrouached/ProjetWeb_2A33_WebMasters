@@ -2,10 +2,15 @@
 
 session_start();
 
-require_once __DIR__."/../../Controller/ReclamationsC.php";
+include_once (__DIR__."/../../Controller/ReclamationsC.php");
 
 $c = new ReclamationsC();
 $tab = $c->listReclamations();
+include_once (__DIR__."//../../Controller/ReponsesC.php");
+$reponseC = new ReponsesC();
+$tab1 = $reponseC->listReponses();
+
+
 
 ?>
 
@@ -39,6 +44,124 @@ $tab = $c->listReclamations();
 
          <!-- Template Stylesheet  -->
         <link href="css/style.css" rel="stylesheet">
+        
+        <style>
+   
+    body {
+        font-family: Arial, sans-serif; /* Update font-family as needed */
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Occupera toute la hauteur de la fenêtre */
+    }
+
+    .tablereclamations {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 50px; /* Ajout de la marge pour centrer les blocs */
+    }
+
+    /* Votre CSS existant */
+    .reclamation {
+        width: 48%; /* Ajustez la largeur selon vos besoins */
+        margin-bottom: 20px;
+    }
+
+    .reclamation-header {
+        background-color: #f9a825;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+        color: #fff;
+    }
+
+    .reclamation-content {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 0 0 8px 8px;
+        border: 1px solid #ccc;
+    }
+
+    /* Couleurs des bulles */
+    .reclamation:nth-child(odd) {
+        margin-left: 20px;
+    }
+
+    .reclamation:nth-child(odd) .reclamation-content {
+        background-color: #ffe0b2;
+    }
+
+    .reclamation:nth-child(even) {
+        margin-right: 20px;
+    }
+
+    .reclamation:nth-child(even) .reclamation-header {
+        background-color: #03a9f4;
+    }
+
+    .reclamation:nth-child(even) .reclamation-content {
+        background-color: #e1f5fe;
+    }
+
+    .tablereponses {
+        width: 100%; /* Occupe toute la largeur de la ligne */
+    }
+
+    .comment-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .comment {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
+
+    .comment-avatar {
+        margin-right: 10px;
+    }
+
+    .comment-text {
+        margin-top: 5px;
+    }
+</style>
+<style>
+        table {
+    border-collapse: collapse;
+    width: 70%;
+    margin: auto; /* Centrer le tableau horizontalement */
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Couleur de fond pour les lignes impaires */
+}
+
+/* Style pour l'en-tête */
+th {
+    background-color: #87CEEB; /* Bleu ciel clair */
+    color: #ffffff; /* Texte blanc */
+}
+
+/* Style pour les liens dans le tableau */
+a {
+    color: blue; /* Couleur bleue pour les liens */
+    text-decoration: none; /* Supprimer le soulignement par défaut */
+}
+
+a:hover {
+    text-decoration: underline; /* Souligner au survol */
+}
+</style>
     </head>
 
     <body>
@@ -131,24 +254,17 @@ $tab = $c->listReclamations();
         <div class="container-fluid contact bg-light py-5">
             <div class="mx-auto text-center mb-5" style="max-width: 1000px;">
                 <div class="container py-5">
-                <h5 class="section-title px-3">Liste des réclamations</h5>
-                    <h1 class="mb-0">Vos réclamations</h1>
+                <h5 class="section-title px-3">Vos Réclamations</h5>
                 </div>
             </div>
         </div>
-         <!-- Contact End  -->
-         <table border="1" align="center" width="70%">
-    <tr>
-        <th>Id reclamation</th>
-        <th>Id client</th>
-        <th>Date de reclamation</th>
-        <th>Titre de reclamation</th>
-        <th>contenu</th>
-        <th>modifier</th>
-        <th>supprimer</th>
-        <th>voir reponse</th>
-    </tr>
 
+
+
+         <!-- Contact End  -->
+ 
+         <div class="container">
+         <div class="tablereclamations">
 
     <?php
     if (is_array($tab) || is_object($tab)){
@@ -156,41 +272,94 @@ $tab = $c->listReclamations();
         if (isset($_SESSION["id_client"]) and $Reclamations["id_client"] == $_SESSION["id_client"]) {
         // if ($Reclamations["id_client"] == 45) {
     ?>
-        <tr>
-            <td><?= $Reclamations['id_reclamation']; ?></td>
-            <td><?= $Reclamations['id_client']; ?></td>
-            <td><?= $Reclamations['date_reclamation']; ?></td>
-            <td><?= $Reclamations['titre_reclamation']; ?></td>
-            <td>
-            <?= $Reclamations['contenu']; ?>
-            </td>
-             <td align="center"> 
-                 <form method="POST" action="updateReclamations.php"> 
-                      <input type="submit" name="update" value="Update"> 
-                     <input type="hidden" name="id_reclamation" value=<?=$Reclamations["id_reclamation"];?>> 
+    <div class="reclamation">
+                    <div class="reclamation-header">
+                    <a 
+                         class="btn btn-outline-success m-2" href="updateReclamations.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to update this ?')">Update
+                        </a>
+                         <a 
+                         class="btn btn-outline-success m-2" href="deleteReclamations.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to delete this ?')">Delete</a>
+                         <th></th>
+                        <h3><?= $Reclamations['titre_reclamation']; ?></h3>
+                        <h6><?= $Reclamations['date_reclamation']; ?></h6>
+                        <h6>votre id <?= $Reclamations['id_client']; ?></h6>
+                        
+                    </div>
+                    <div class="reclamation-content bubble">
+                        <h5> Votre réclamation:</h5>        
+                         <?= $Reclamations['contenu']; ?>
+
+                        <!-- Disqus Comments Container -->
+                        <div id="disqus_thread_<?= $Reclamations['id_reclamation']; ?>"></div>
+                        <script>
+                            var disqus_config = function () {
+                                this.page.url = '<?= $_SERVER['REQUEST_URI']; ?>'; // Replace with your page URL
+                                this.page.identifier = 'reclamation_<?= $tab['id_reclamation']; ?>'; // Replace with your reclamation identifier, e.g., reclamation ID or slug
+                            };
+                            (function () {
+                                var d = document,
+                                    s = d.createElement('script');
+                                s.src = 'https://your-disqus-shortname.disqus.com/embed.js'; // Replace "your-disqus-shortname" with your Disqus shortname
+                                s.setAttribute('data-timestamp', +new Date());
+                                (d.head || d.body).appendChild(s);
+                            })();
+                        </script>
+                        <noscript>
+                            Please enable JavaScript to view the
+                            <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+                        </noscript>
+                        <!-- End Disqus Comments Container -->
 
 
-                     <!-- <input type="hidden" value=<?PHP// echo $Reclamations['id_reclamation']; ?> id_reclamation="id_reclamation"> -->
-                 </form> 
-            </td> 
-     
-            <td align="center">
-            <a href="deleteReclamations.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to delete this ?')">Delete</a>
-            </td>
-            <td align="center">
-            <a href="listReponses.php?id_reclamation=<?= $Reclamations['id_reclamation']; ?>" onclick="return confirm('Are you sure you want to see respond  ?')">reponse</a>
-            </td>
-        </tr>
-    <?php
-    }}}
-    ?>
-    </table>
+                        <!-- Comments for the reclamation -->
+                        <div class="tablereponses">
+                            <h4>Réponses:</h4>
+                            <ul class="comment-list">
+                                <?php
+                                // Assuming $tab1 contains the comments, $reclamations contains the current reclamation, and $censoredWords is an array of words to censor
+                                //require_once 'censor.php'; // Include the censorship function
+                                // Define the array of censored words
+                                //$censoredWords = ['rude', 'sabee', 'bessem','loody'];
+                                foreach ($tab1 as $reponse) {
+                                    if ($reponse['id_reclamation'] == $Reclamations['id_reclamation']) {
+                                        // Censor the comment before displaying it
+                                        //$censoredComment = censorComment($reponse['rep'], $censoredWords);
+                                ?>
+                                        <li class="comment">
+                                            <div class="comment-avatar">
+                                                <!-- Add code to display user avatar if available -->
+                                            </div>
+                                            <div class="comment-content">
+                                                <div class="comment-author">
+                                                    <!-- Add code to display user name if available -->
+                                                </div>
+                                                <div class="comment-text"><?=$reponse['date_reponse']; ?></div>
+                                                <div class="comment-text"><?= $reponse['rep']; ?></div>
+                                               
+                                            </div>
+                                            
+                                        </li>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            <?php
+            }}}
+            ?>
+        </div>
+    </div>
+   
 
 
 
 
          <!-- Footer Start  -->
-        <div class="container-fluid footer py-5">
+<div class="container-fluid footer py-5">
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-3">

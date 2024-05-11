@@ -363,38 +363,36 @@ $tab = $c->listReponses();
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
     <script>
-    document.getElementById('searchForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Empêche la soumission du formulaire
+   document.getElementById('searchInput').addEventListener('input', function() {
+    var searchTerm = this.value.toLowerCase(); // Récupère la valeur saisie dans le champ de recherche
+    var tableRows = document.getElementById('reponsesTable').getElementsByTagName('tr'); // Récupère toutes les lignes du tableau
 
-        var searchTerm = document.getElementById('searchInput').value.toLowerCase(); // Récupère la valeur saisie dans le champ de recherche
-        var tableRows = document.getElementById('reponsesTable').getElementsByTagName('tr'); // Récupère toutes les lignes du tableau
+    // Parcours toutes les lignes du tableau sauf la première (en-têtes)
+    for (var i = 1; i < tableRows.length; i++) {
+        var row = tableRows[i];
+        var rowData = row.getElementsByTagName('td'); // Récupère les données de chaque cellule de la ligne
 
-        // Parcours toutes les lignes du tableau sauf la première (en-têtes)
-        for (var i = 1; i < tableRows.length; i++) {
-            var row = tableRows[i];
-            var rowData = row.getElementsByTagName('td'); // Récupère les données de chaque cellule de la ligne
+        var rowVisible = false; // Indique si la ligne doit être affichée ou non
 
-            var rowVisible = false; // Indique si la ligne doit être affichée ou non
+        // Parcours les données de chaque cellule de la ligne
+        for (var j = 0; j < rowData.length; j++) {
+            var cellData = rowData[j].textContent.toLowerCase(); // Récupère le texte de la cellule en minuscules
 
-            // Parcours les données de chaque cellule de la ligne
-            for (var j = 0; j < rowData.length; j++) {
-                var cellData = rowData[j].textContent.toLowerCase(); // Récupère le texte de la cellule en minuscules
-
-                // Si le texte de la cellule contient le terme de recherche, la ligne doit être affichée
-                if (cellData.includes(searchTerm)) {
-                    rowVisible = true;
-                    break; // Sort de la boucle interne si le terme est trouvé dans une cellule
-                }
-            }
-
-            // Affiche ou masque la ligne en fonction du résultat de la recherche
-            if (rowVisible) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+            // Si le texte de la cellule contient le terme de recherche, la ligne doit être affichée
+            if (cellData.includes(searchTerm)) {
+                rowVisible = true;
+                break; // Sort de la boucle interne si le terme est trouvé dans une cellule
             }
         }
-    });
+
+        // Affiche ou masque la ligne en fonction du résultat de la recherche
+        if (rowVisible) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+});
 </script>
 <script>
     // Fonction pour trier le tableau en fonction de la colonne spécifiée
