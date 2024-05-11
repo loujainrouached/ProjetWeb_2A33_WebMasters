@@ -14,50 +14,77 @@ $tab1 = $commentaireC->liste_commentaire();
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-         <title>Liste des articles</title>
+<head>
+<title>Liste des articles</title>
          <style>
-.article {
-  margin-bottom: 20px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des articles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Update font-family as needed */
+            margin: 0;
+            padding: 0;
+        }
 
-.article-header {
-  background-color: #f9a825;
-  padding: 10px;
-  border-radius: 8px 8px 0 0;
-  color: #fff;
-}
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-.article-content {
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 0 0 8px 8px;
-  border: 1px solid #ccc;
-}
+        .tableArticles {
+            max-width: 800px; /* Adjust max-width as needed */
+            padding: 20px;
+            border: 1px solid #ccc; /* Optional: Add border */
+            border-radius: 8px; /* Optional: Add border-radius */
+            background-color: #f9f9f9; /* Optional: Add background color */
+        }
 
-/* Couleurs des bulles */
-.article:nth-child(odd) .article-header {
-  background-color: #ff9800;
-}
+        /* Your existing CSS styles */
+        .article {
+            margin-bottom: 20px;
+        }
 
-.article:nth-child(odd) .article-content {
-  background-color: #ffe0b2;
-}
+        .article-header {
+            background-color: #f9a825;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            color: #fff;
+        }
 
-.article:nth-child(even) .article-header {
-  background-color: #03a9f4;
-}
+        .article-content {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #ccc;
+        }
 
-.article:nth-child(even) .article-content {
-  background-color: #e1f5fe;
-}
-</style>
+        /* Couleurs des bulles */
+        .article:nth-child(odd) .article-header {
+            background-color: #ff9800;
+        }
+
+        .article:nth-child(odd) .article-content {
+            background-color: #ffe0b2;
+        }
+
+        .article:nth-child(even) .article-header {
+            background-color: #03a9f4;
+        }
+
+        .article:nth-child(even) .article-content {
+            background-color: #e1f5fe;
+        }
+    </style>
 </head>
+
 <body>
     <!-- Contenu de la page -->
     <!-- ... -->
 </body>
-        <meta charset="utf-8">
+<meta charset="utf-8">
         <title>Travela - Tourism Website Template</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
@@ -158,52 +185,51 @@ $tab1 = $commentaireC->liste_commentaire();
             <div class="container text-center py-5" style="max-width: 900px;">
                 <h3 class="text-white display-3 mb-4">Our Blog</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active text-white">Blog</li>
                 </ol>    
             </div>
         </div>
         <!-- Header End -->
 
 
+        
+    <!-- Wrapper container -->
+    <div class="container">
+        <!--Liste des articles-->
+        <div class="tableArticles">
+            <?php
+            foreach ($tab as $article) {
+            ?>
+                <div class="article">
+                    <div class="article-header">
+                        <h3><?= $article['titre_article']; ?></h3>
+                        <span><?= $article['date_de_publication']; ?></span>
+                    </div>
+                    <div class="article-content bubble">
+                        <?= $article['contenu_article']; ?>
 
-<!--Liste des articles-->
-<div class="tableArticles">
-    <?php
-    foreach ($tab as $article) {
-    ?>
-        <div class="article">
-            <div class="article-header">
-                <h3><?= $article['titre_article']; ?></h3>
-                <span><?= $article['date_de_publication']; ?></span>
-            </div>
-            <div class="article-content bubble">
-                <?= $article['contenu_article']; ?>
+                        <!-- Disqus Comments Container -->
+                        <div id="disqus_thread_<?= $article['id_article']; ?>"></div>
+                        <script>
+                            var disqus_config = function () {
+                                this.page.url = '<?= $_SERVER['REQUEST_URI']; ?>'; // Replace with your page URL
+                                this.page.identifier = 'article_<?= $article['id_article']; ?>'; // Replace with your article identifier, e.g., article ID or slug
+                            };
+                            (function () {
+                                var d = document,
+                                    s = d.createElement('script');
+                                s.src = 'https://your-disqus-shortname.disqus.com/embed.js'; // Replace "your-disqus-shortname" with your Disqus shortname
+                                s.setAttribute('data-timestamp', +new Date());
+                                (d.head || d.body).appendChild(s);
+                            })();
+                        </script>
+                        <noscript>
+                            Please enable JavaScript to view the
+                            <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+                        </noscript>
+                        <!-- End Disqus Comments Container -->
 
-                <!-- Disqus Comments Container -->
-                <div id="disqus_thread_<?= $article['id_article']; ?>"></div>
-                <script>
-                    var disqus_config = function () {
-                        this.page.url = '<?= $_SERVER['REQUEST_URI']; ?>'; // Replace with your page URL
-                        this.page.identifier = 'article_<?= $article['id_article']; ?>'; // Replace with your article identifier, e.g., article ID or slug
-                    };
-                    (function () {
-                        var d = document,
-                            s = d.createElement('script');
-                        s.src = 'https://your-disqus-shortname.disqus.com/embed.js'; // Replace "your-disqus-shortname" with your Disqus shortname
-                        s.setAttribute('data-timestamp', +new Date());
-                        (d.head || d.body).appendChild(s);
-                    })();
-                </script>
-                <noscript>
-                    Please enable JavaScript to view the
-                    <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-                </noscript>
-                <!-- End Disqus Comments Container -->
+                        <a href="addcommentaire.php?id_article=<?= $article['id_article']; ?>" class="btn lire-article">commentaire</a>
 
-                <a href="addcommentaire.php?id_article=<?= $article['id_article']; ?>" class="btn lire-article">commentaire</a>
-                
 
 <!-- Comments for the article -->
 <div class="tablecommentaires">
@@ -213,28 +239,28 @@ $tab1 = $commentaireC->liste_commentaire();
         // Assuming $tab1 contains the comments, $article contains the current article, and $censoredWords is an array of words to censor
         require_once 'censorship.php'; // Include the censorship function
         // Define the array of censored words
-$censoredWords = ['rude', 'sabee', 'bessem'];
+        $censoredWords = ['rude', 'sabee', 'bessem','loody'];
         foreach ($tab1 as $commentaire) {
             if ($commentaire['id_article'] == $article['id_article']) {
                 // Censor the comment before displaying it
                 $censoredComment = censorComment($commentaire['contenu_commentaire'], $censoredWords);
         ?>
                 <li class="comment">
-                    <div class="comment-avatar">
-                        <!-- Add code to display user avatar if available -->
-                    </div>
-                    <div class="comment-content">
-                        <div class="comment-author">
-                            <!-- Add code to display user name if available -->
+                    <div class="comment-bubble">
+                        <div class="comment-avatar">
+                            <!-- Add code to display user avatar if available -->
                         </div>
-                        <div class="comment-text"><?= $censoredComment; ?></div> <!-- Display the censored comment -->
+                        <div class="comment-content">
+                            <div class="comment-author">
+                                <!-- Add code to display user name if available -->
+                            </div>
+                            <div class="comment-text"><?= $censoredComment; ?></div> <!-- Display the censored comment -->
+                            <div class="comment-actions">
+                                <a class="btn btn-outline-dark btn-sm m-1" href="updatecommentaire.php?ID_commentaire=<?= $commentaire['ID_commentaire']; ?>" >update</a>
+                                <a class="btn btn-outline-dark btn-sm m-1" href="deletecommentaire.php?ID_commentaire=<?= $commentaire['ID_commentaire']; ?>"  >Delete</a>
+                            </div>
+                        </div>
                     </div>
-                    <td>
-                        <a href="updatecommentaire.php?ID_commentaire=<?= $commentaire['ID_commentaire']; ?>" onclick="return confirm('Are you sure you want to update this ?')">__________update_________</a>
-                    </td>
-                    <td>
-                        <a href="deletecommentaire.php?ID_commentaire=<?= $commentaire['ID_commentaire']; ?>" onclick="return confirm('Are you sure you want to delete this ?')">________Delete</a>
-                    </td>
                 </li>
         <?php
             }
@@ -243,13 +269,15 @@ $censoredWords = ['rude', 'sabee', 'bessem'];
     </ul>
 </div>
 
-            </div>
-        </div>
-    <?php
-    }
-    ?>
-</div>
 
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
+        </div>
+    </div>
+    
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
@@ -267,5 +295,4 @@ $censoredWords = ['rude', 'sabee', 'bessem'];
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>
