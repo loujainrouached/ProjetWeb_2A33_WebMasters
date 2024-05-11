@@ -6,16 +6,27 @@ class Reservation {
     private $date_reservation;
     private $nombre_personnes;
     private $numero_personne;
+    private $id_user;
 
 
-    public function __construct($id,$id_voyage, $date_reservation, $nombre_personnes, $numero_personne)
+    public function __construct($id,$id_voyage, $date_reservation, $nombre_personnes, $numero_personne, $id_user)
     {
         $this->id = $id;
         $this->id_voyage = $id_voyage;
         $this->date_reservation = $date_reservation;
         $this->nombre_personnes = $nombre_personnes;
         $this->numero_personne = $numero_personne;
+        $this->id_user = $id_user;
         
+    }
+
+    public function getid_user()
+    {
+    return $this->id_user;
+    }
+    public function setid_user($id_user)
+    {
+        $this->id_user = $id_user;
     }
 
        // Getter et Setter pour $id

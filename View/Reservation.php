@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include '../Controller/ReservationC.php'; // Inclure le contrôleur de réservation
 include '../Model/Reservation.php'; // Inclure le modèle de réservation
 include 'qrCode.php';
@@ -11,7 +11,10 @@ if (
     isset($_POST['id_voyage']) &&
     isset($_POST['date_reservation']) &&
     isset($_POST['nombre_personnes']) &&
-    isset($_POST['numero_personne'])
+    isset($_POST['numero_personne'])  &&
+    isset($_SESSION['id_user'] )// Utilisation de l'ID de session ici
+   
+
 ) {
     // Créer une nouvelle instance de réservation en récupérant les données du formulaire
     $reservation = new Reservation(
@@ -19,12 +22,14 @@ if (
         $_POST['id_voyage'],
         $_POST['date_reservation'],
         $_POST['nombre_personnes'],
-        $_POST['numero_personne']
+        $_POST['numero_personne'],
+        $_SESSION['id_user'] // Utilisation de l'ID de session ici
     );
 
     // Ajouter la réservation
-    $reservationC->ajouterReservation($reservation);
-    
+  
+    // Appel de la fonction ajouterReservation en passant l'ID de l'utilisateur actuel
+$reservationC->ajouterReservation($reservation, $_SESSION['id_user']);
 }
 $db = config::getConnexion();
 
@@ -116,8 +121,8 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown"><small><i class="fa fa-home me-2"></i> My Dashboard</small></a>
                             <div class="dropdown-menu rounded">
-                            <a href="user.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> My Profile</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Inbox</a>
+                            <a href="profil.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> My Profile</a>
+                                <a href="user.php" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i>Mes Reservations</a>
                                 <a href="#" class="dropdown-item"><i class="fas fa-bell me-2"></i> Notifications</a>
                                 <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Account Settings</a>
                                 <a href="#" class="dropdown-item"><i class="fas fa-power-off me-2"></i> Log Out</a>
@@ -133,7 +138,7 @@ $voyages = $query->fetchAll(PDO::FETCH_ASSOC);
        <!-- Navbar & Hero Start -->
        <div class="container-fluid position-relative p-0">
                 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-                    <a href="" class="navbar-brand p-0">
+                    <a href="Reservation.php" class="navbar-brand p-0">
                         <h1 class="m-0"><img src="tayara.png" alt="VieXplore Logo" class="me-3">VieXplore</h1>
                     
     
