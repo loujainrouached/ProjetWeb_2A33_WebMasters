@@ -1,0 +1,67 @@
+/* Réinitialisation de base et styles du corps */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #f0f8ff; /* Bleu clair */
+}
+
+/* Liens */
+a {
+  color: #ff9933; /* Orange */
+  text-decoration: none;
+}
+a:hover {
+  color: #f06c00; /* Orange plus foncé */
+}
+
+/* Bouton standard et bouton de soumission de formulaire */
+button, input[type="submit"] {
+  background-color: #ff9933; /* Orange */
+  color: white;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style du formulaire pour centralisation et apparence */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: #e0ebef; /* Bleu clair avec une touche de gris */
+  width: auto;
+  margin: 50px auto;
+}
+
+/* Champs de formulaire */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"] {
+  width: 100%; /* Pleine largeur dans le formulaire */
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+/* Label aligné pour le formulaire */
+label {
+  display: inline-block;
+  width: 70px;
+  text-align: right;
+  margin-right: 10px;
+}
+
+
+
+/* Conteneur pour centrage */
+.container {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 14px;
+}
