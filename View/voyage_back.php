@@ -78,10 +78,10 @@ $data = $reservationData['data'];
         <!-- Spinner End -->
 
 
-        <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
+     <!-- Sidebar Start -->
+    <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-            <a href="index1.html">
+                <a href="index.html">
                     <h5 class="text-primary"><i class="fa fa-hashtag me-2"></i><img src="tayara.png" alt="VieXplore Logo" class="me-3"><br><center>VieXplore</center><br><br></h5>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -90,24 +90,46 @@ $data = $reservationData['data'];
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                    <h6 class="mb-0">loj</h6>
+                     
                         <span>Admin</span>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index1.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    
-            
+                <a href="ListEmployes.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Voyage</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="voyage_back.php" class="dropdown-item">liste voyage</a>
                             <a href="reservation_back.php" class="dropdown-item">liste reservation</a>
                      
-                        
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>guide</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                            <a href="button.php" class="dropdown-item">liste des pays</a>
+                            <a href="typography.php" class="dropdown-item">liste des guides</a>
+                            <a href="vexo.html" class="dropdown-item">vexo the chatbot</a>
+                         
+                            </div>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Article de blog</a>
+                                <div class="dropdown-menu bg-transparent border-0">
+                                    <a href="button.html" class="dropdown-item">liste ds article postes</a>
+                                    <a href="typography.html" class="dropdown-item">liste des commentaires</a>
+                             
+                                </div>
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Clients</a>
+                                    <div class="dropdown-menu bg-transparent border-0">
+                                        <a href="listReclamations.php" class="dropdown-item">liste reclamation</a>
+                                        <a href="typography.html" class="dropdown-item">liste reponse</a>
+                                 
+                                    </div>
                 </div>
             </nav>
         </div>
+        <!-- Sidebar End -->
         <!-- Sidebar End -->
 
         <!-- Content Start -->
@@ -209,11 +231,7 @@ $data = $reservationData['data'];
 
 
 
-   
-  <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #000000;">
-   
-  </nav>
-
+   <br>
   <div class="container">
    <?php
     if (isset($_GET["msg"])) {
@@ -224,11 +242,11 @@ $data = $reservationData['data'];
     </div>';
     }
     ?>
-    <a href="add-new.php" class="btn btn-dark mb-3">Ajouter</a>
+    <a href="add-new.php" class="btn btn-light mb-3">Ajouter</a>
    
 
     <table class="table table-hover text-center">
-      <thead class="table-dark">
+      <thead class="table-light">
         <tr>
           <th scope="col">ID</th>
           <th scope="col"> type</th>
