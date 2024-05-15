@@ -180,9 +180,9 @@ section {
         </div>
         <!-- Spinner End -->
 
-             
-  <!-- Topbar Start -->
-  <div class="container-fluid bg-primary px-5 d-none d-lg-block">
+
+   <!-- Topbar Start  -->
+   <div class="container-fluid bg-primary px-5 d-none d-lg-block">
             <div class="row gx-0">
                 <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                     <div class="d-inline-flex align-items-center" style="height: 45px;">
@@ -193,32 +193,31 @@ section {
                         <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href=""><i class="fab fa-youtube fw-normal"></i></a>
                     </div>
                 </div>
+                
                 <div class="col-lg-4 text-center text-lg-end">
                     <div class="d-inline-flex align-items-center" style="height: 45px;">
-                        <a href="#"><small class="me-3 text-light"><i class="fa fa-user me-2"></i>Register</small></a>
-                        <a href="#"><small class="me-3 text-light"><i class="fa fa-sign-in-alt me-2"></i>Login</small></a>
+                    <a href="vexo.html"><small class="me-3 text-light"><i class="fa fa-user me-2"></i>Vexo Chat bot</small></a>
+                        
                         <div class="dropdown">
-                            <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown"><small><i class="fa fa-home me-2"></i> My Dashboard</small></a>
+                            <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown"><small><i class="fa fa-home me-2"></i> Parametres</small></a>
                             <div class="dropdown-menu rounded">
-                            <a href="user.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> My Profile</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Inbox</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-bell me-2"></i> Notifications</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Account Settings</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-power-off me-2"></i> Log Out</a>
+                                <a href="profil.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i>votre Profile</a>
+                                <a href="user.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> Vos Reservations</a>
+                                <a href="listereclamation.php" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Reclamations</a>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+</div>
         <!-- Topbar End -->
-
-
 
               <!-- Navbar & Hero Start -->
               <div class="container-fluid position-relative p-0">
                 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-                    <a href="" class="navbar-brand p-0">
+                <a href="index.html" class="navbar-brand p-0">
                         <h1 class="m-0"><img src="tayara.png" alt="VieXplore Logo" class="me-3">VieXplore</h1>
                     
     
@@ -231,20 +230,19 @@ section {
                         <div class="navbar-nav ms-auto py-0">
                             <a href="index.html" class="nav-item nav-link">Home</a>
                             <a href="destination.php" class="nav-item nav-link">Destination</a>
-                            <a href="services.html" class="nav-item nav-link">Reclamation</a>
-                            <a href="blog.html" class="nav-item nav-link">Blog</a>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="guides.php" class="nav-item nav-link">Guides</a>
+                            <a href="blog.php" class="nav-item nav-link">Blog</a>
+                            <a href="contact.php" class="nav-item nav-link">Reclamtion</a>
                         </div>
-                        <a href="Reservation.php" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4">Book Now</a>
+                        <a href="Reservation.php" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4">Reservation Maintenant</a>
                     </div>
                 </nav>
-        </div>
-        <!-- Navbar & Hero End -->
+        </div>        <!-- Navbar & Hero End -->
 
         <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">
             <div class="container text-center py-5" style="max-width: 900px;">
-                <h3 class="text-white display-3 mb-4">Votre Profile</h1>
+                <h3 class="text-white display-3 mb-4">Vos Reservations</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
                   
                 </ol>    
@@ -262,7 +260,7 @@ section {
 
 <div class="col-lg-6 px-xl-10">
 <div class="bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
-<h5 class="h2 text-white mb-0">Your Reservation</h3>
+<h5 class="h2 text-white mb-0">Reservation</h3>
 
 </div>
 <?php

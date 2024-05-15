@@ -1,6 +1,35 @@
 <?php
 include "../Controller/VoyageC.php";
+session_start();
+function countUnreadReclamations()
+{
+    $sql = "SELECT COUNT(*) AS count FROM reclamations WHERE vue_par_admin = 0";
+    $db = config::getConnexion();
+    try {
+        $stmt = $db->query($sql);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
+    } catch (Exception $e) {
+        die('Error:' . $e->getMessage());
+    }
+}
 
+$unreadCount=countUnreadReclamations();
+
+
+
+function listUnreadReclamationsAdmin()
+{
+    $sql = "SELECT * FROM reclamations WHERE vue_par_admin = 0";
+    $db = config::getConnexion();
+    try {
+        $stmt = $db->query($sql);
+        $rec = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rec;
+    } catch (Exception $e) {
+        die('Error:' . $e->getMessage());
+    }
+}
 
 $voyage = new VoyageC();
 $tab = $voyage->listeVoyage();
@@ -19,6 +48,34 @@ $reservationData = $voyage->getReservationData();
 // Obtenez les labels et les données de réservation
 $labels = $reservationData['labels'];
 $data = $reservationData['data'];
+
+
+
+
+
+
+
+
+
+if(isset($_SESSION['id_user'])) {
+    // Connexion à la base de données
+    $db = config::getConnexion();
+
+    // Récupérer les informations de l'utilisateur à partir de la base de données en utilisant l'ID stocké dans la session
+    $userId = $_SESSION['id_user'];
+    $sql = "SELECT prenom_user, nom_user FROM table_users WHERE id_user = :id_user";
+    $query = $db->prepare($sql);
+    $query->execute(['id_user' => $userId]);
+
+    // Récupérer le prénom et le nom de l'utilisateur
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Vérifier si le prénom de l'utilisateur est défini avant de l'afficher dans le HTML
+    if(isset($user['prenom_user']) && isset($user['nom_user'])) {
+        $prenom_user = $user['prenom_user'];
+        $nom_user = $user['nom_user'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +138,7 @@ $data = $reservationData['data'];
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-            <a href="index1.html">
+                <a href="ListEmployes.php">
                     <h5 class="text-primary"><i class="fa fa-hashtag me-2"></i><img src="tayara.png" alt="VieXplore Logo" class="me-3"><br><center>VieXplore</center><br><br></h5>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -90,30 +147,54 @@ $data = $reservationData['data'];
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
-                        <span>Admin</span>
+
+
+                    <?php if(isset($prenom_user) && isset($nom_user)) : ?>
+    <span class="mb-0"><?php echo $prenom_user . ' ' . $nom_user; ?></span>
+<?php endif; ?>
+ 
+                     
+                    
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index1.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    
-            
+                <a href="ListEmployes.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Voyage</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="voyage_back.php" class="dropdown-item">liste voyage</a>
                             <a href="reservation_back.php" class="dropdown-item">liste reservation</a>
                      
-                        
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>guide</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                            <a href="button.php" class="dropdown-item">liste des pays</a>
+                            <a href="typography.php" class="dropdown-item">liste des guides</a>
+                            <a href="vexo.html" class="dropdown-item">vexo the chatbot</a>
+                         
+                            </div>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Article de blog</a>
+                                <div class="dropdown-menu bg-transparent border-0">
+                                    <a href="ListeArticles.php" class="dropdown-item">liste ds article postes</a>
+                                    
+                                </div>
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Clients</a>
+                                    <div class="dropdown-menu bg-transparent border-0">
+                                        <a href="listReclamations.php" class="dropdown-item">liste reclamation</a>
+
+                                    </div>
                 </div>
             </nav>
         </div>
         <!-- Sidebar End -->
+        <!-- Sidebar End -->
 
         <!-- Content Start -->
         <div class="content">
-            <!-- Navbar Start -->
-            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
@@ -133,30 +214,21 @@ $data = $reservationData['data'];
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
+                                    
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
+                                   
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
+                                    
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
@@ -165,37 +237,39 @@ $data = $reservationData['data'];
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                       
+                            <i class="fa fa-bell me-lg-2 position-relative">
+                            <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle"><?php echo $unreadCount; ?></span>
+                        </i>
+                        <span class="d-none d-lg-inline-flex">Notification</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                        <!-- Ajoutez ici les réclamations non lues -->
+                        <?php
+                        // Récupérer les réclamations non lues
+                        $unreadReclamations =listUnreadReclamationsAdmin();
+                        foreach ($unreadReclamations as $reclamation) {
+                            echo '<a href="#" class="dropdown-item">';
+                            echo '<h6 class="fw-normal mb-0">' . $reclamation["titre_reclamation"] . '</h6>';
+                            echo '<small>' . $reclamation["date_reclamation"] . '</small>';
+                            echo '</a>';
+                            echo '<hr class="dropdown-divider">';
+                        }
+                        ?>
+                            <a href="listReclamations.php" >See all notifications</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                          <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+<?php if(isset($prenom_user) && isset($nom_user)) : ?>
+    <span class="d-none d-lg-inline-flex"><?php echo $prenom_user . ' ' . $nom_user; ?></span>
+<?php endif; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            <a href="profil.php" class="dropdown-item">My Profile</a>
+                         
+                            <a href="Connexion.php" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -209,11 +283,7 @@ $data = $reservationData['data'];
 
 
 
-   
-  <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #000000;">
-   
-  </nav>
-
+   <br>
   <div class="container">
    <?php
     if (isset($_GET["msg"])) {
@@ -224,11 +294,11 @@ $data = $reservationData['data'];
     </div>';
     }
     ?>
-    <a href="add-new.php" class="btn btn-dark mb-3">Ajouter</a>
+    <a href="add-new.php" class="btn btn-light mb-3">Ajouter</a>
    
 
     <table class="table table-hover text-center">
-      <thead class="table-dark">
+      <thead class="table-light">
         <tr>
           <th scope="col">ID</th>
           <th scope="col"> type</th>
@@ -315,7 +385,7 @@ $data = $reservationData['data'];
     <div class="row">
         <div class="col-md-6">
             
-     <div style="width: 50%">
+     <div style="width: 70%">
                 <canvas id="myChart"></canvas>
             </div>
 
@@ -353,14 +423,25 @@ $data = $reservationData['data'];
             }]
         },
         options: {
-            responsive: true,
-            aspectRatio: 1, // Pour s'assurer que le graphique est un cercle
-            scales: {
-                y: {
-                    display: false
-                }
+    responsive: true,
+    aspectRatio: 1, // Pour s'assurer que le graphique est un cercle
+    scales: {
+        y: {
+            display: false
+        }
+    },
+    plugins: {
+        title: {
+            display: true,
+            text: 'Nombre de Réservations par Destination',
+            padding: {
+                top: 10,
+                bottom: 20
             }
         }
+    }
+}
+
     });
     </script>
 

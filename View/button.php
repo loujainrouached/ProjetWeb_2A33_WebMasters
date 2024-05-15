@@ -1,22 +1,69 @@
 <?php
-include "../Controller/VoyageC.php";
+include "../Controller/PaysC.php";
 
-$voyage = new VoyageC();
-$tab = $voyage->listeVoyage();
+session_start();
 
+
+  // Incluez votre classe ReclamationsC et tout autre fichier nécessaire
+  function countUnreadReclamations()
+  {
+      $sql = "SELECT COUNT(*) AS count FROM reclamations WHERE vue_par_admin = 0";
+      $db = config::getConnexion();
+      try {
+          $stmt = $db->query($sql);
+          $result = $stmt->fetch(PDO::FETCH_ASSOC);
+          return $result['count'];
+      } catch (Exception $e) {
+          die('Error:' . $e->getMessage());
+      }
+  }
+
+  $unreadCount=countUnreadReclamations();
+  
+  
+  
+  function listUnreadReclamationsAdmin()
+  {
+      $sql = "SELECT * FROM reclamations WHERE vue_par_admin = 0";
+      $db = config::getConnexion();
+      try {
+          $stmt = $db->query($sql);
+          $rec = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          return $rec;
+      } catch (Exception $e) {
+          die('Error:' . $e->getMessage());
+      }
+  }
+
+
+
+
+$c = new functions();
+$tab = $c->listPays();
+if(isset($_SESSION['id_user'])) {
+    // Connexion à la base de données
+    $db = config::getConnexion();
+
+    // Récupérer les informations de l'utilisateur à partir de la base de données en utilisant l'ID stocké dans la session
+    $userId = $_SESSION['id_user'];
+    $sql = "SELECT prenom_user, nom_user FROM table_users WHERE id_user = :id_user";
+    $query = $db->prepare($sql);
+    $query->execute(['id_user' => $userId]);
+
+    // Récupérer le prénom et le nom de l'utilisateur
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Vérifier si le prénom de l'utilisateur est défini avant de l'afficher dans le HTML
+    if(isset($user['prenom_user']) && isset($user['nom_user'])) {
+        $prenom_user = $user['prenom_user'];
+        $nom_user = $user['nom_user'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <meta charset="utf-8">
     <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -36,14 +83,69 @@ $tab = $voyage->listeVoyage();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="lib1/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib1/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css1/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css1/style.css" rel="stylesheet">
+    <style>
+        /* Orange pastel background color */
+        body {
+           
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Styles for the table */
+        table {
+            border-collapse: collapse;
+            width: 70%;
+            margin: 20px auto; /* Center the table */
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+           
+        }
+
+        /* Styles for the headings */
+        h1,
+        h2 {
+            text-align: center;
+            color: ##25BDC4; /* Orange Red color for headings */
+        }
+
+        /* Link style for 'Add a guide' */
+        a {
+            text-decoration: none;
+            color: ##25BDC4;
+        }
+
+        /* Link style for 'Delete' */
+        .delete-link {
+            color: red;
+            text-decoration: none;
+        }
+
+        /* Update button style */
+        input[type="submit"] {
+          
+            border: none;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -57,10 +159,10 @@ $tab = $voyage->listeVoyage();
         <!-- Spinner End -->
 
 
-        <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
+  <!-- Sidebar Start -->
+  <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-                <a href="index.html">
+                <a href="ListEmployes.php">
                     <h5 class="text-primary"><i class="fa fa-hashtag me-2"></i><img src="tayara.png" alt="VieXplore Logo" class="me-3"><br><center>VieXplore</center><br><br></h5>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -69,22 +171,51 @@ $tab = $voyage->listeVoyage();
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
-                        <span>Admin</span>
+
+
+                    <?php if(isset($prenom_user) && isset($nom_user)) : ?>
+    <span class="mb-0"><?php echo $prenom_user . ' ' . $nom_user; ?></span>
+<?php endif; ?>
+ 
+                     
+                    
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="ListEmployes.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                    <a href="element.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Voyage</a>
-                        
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Voyage</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="voyage_back.php" class="dropdown-item">liste voyage</a>
+                            <a href="reservation_back.php" class="dropdown-item">liste reservation</a>
                      
                         </div>
-                        
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>guide</a>
+                            <div class="dropdown-menu bg-transparent border-0">
+                            <a href="button.php" class="dropdown-item">liste des pays</a>
+                            <a href="typography.php" class="dropdown-item">liste des guides</a>
+                            <a href="vexo.html" class="dropdown-item">vexo the chatbot</a>
+                         
+                            </div>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Article de blog</a>
+                                <div class="dropdown-menu bg-transparent border-0">
+                                    <a href="ListeArticles.php" class="dropdown-item">liste ds article postes</a>
+                                    
+                                </div>
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Clients</a>
+                                    <div class="dropdown-menu bg-transparent border-0">
+                                        <a href="listReclamations.php" class="dropdown-item">liste reclamation</a>
+                                       
+                                    </div>
                 </div>
             </nav>
         </div>
         <!-- Sidebar End -->
+        <!-- Sidebar End -->
+
 
         <!-- Content Start -->
         <div class="content">
@@ -109,30 +240,21 @@ $tab = $voyage->listeVoyage();
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
+                                    
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
+                                   
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
+                                    
                                 </div>
                             </a>
                             <hr class="dropdown-divider">
@@ -141,114 +263,255 @@ $tab = $voyage->listeVoyage();
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                       
+                            <i class="fa fa-bell me-lg-2 position-relative">
+                            <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle"><?php echo $unreadCount; ?></span>
+                        </i>
+                        <span class="d-none d-lg-inline-flex">Notification</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                        <!-- Ajoutez ici les réclamations non lues -->
+                        <?php
+                        // Récupérer les réclamations non lues
+                        $unreadReclamations =listUnreadReclamationsAdmin();
+                        foreach ($unreadReclamations as $reclamation) {
+                            echo '<a href="#" class="dropdown-item">';
+                            echo '<h6 class="fw-normal mb-0">' . $reclamation["titre_reclamation"] . '</h6>';
+                            echo '<small>' . $reclamation["date_reclamation"] . '</small>';
+                            echo '</a>';
+                            echo '<hr class="dropdown-divider">';
+                        }
+                        ?>
+                            <a href="listReclamations.php" >See all notifications</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                          <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+<?php if(isset($prenom_user) && isset($nom_user)) : ?>
+    <span class="d-none d-lg-inline-flex"><?php echo $prenom_user . ' ' . $nom_user; ?></span>
+<?php endif; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            <a href="profil.php" class="dropdown-item">My Profile</a>
+                         
+                            <a href="Connexion.php" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
             </nav>
+            
             <!-- Navbar End -->
 
 
             <!-- Button Start -->
+            <h1>Liste des pays</h1>
+    <h2>
+        <a href="addPays.php">Ajouter un pays</a>
+    </h2>
+    <?php
+    $tab = array();
 
+// Check if the sorting form has been submitted
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tri'])) {
+    // Get the sorting value
+    $tri = $_GET['tri'];
 
+    // Create an instance of the controller
+    $f = new functions();
 
-
-
-    <div class="container">
-   <?php
-    if (isset($_GET["msg"])) {
-      $msg = $_GET["msg"];
-      echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-      ' . $msg . '
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>';
+    // Call the sorting function of the controller
+    if ($tri === 'asc' || $tri === 'desc') {
+        $tab = $f->tripmonuments(strtoupper($tri));
+    } else {
+        // Handle other sorting cases if necessary
     }
-    ?>
-    <a href="add-new.php" class="btn btn-dark mb-3">Add New</a>
-
-    <table class="table table-hover text-center">
-      <thead class="table-dark">
+} else {
+    // If no sorting is specified, display the unsorted list by default
+    $f = new functions();
+    $tab = $f->tripmonuments(); // For example, ascending sorting by default
+}
+?>
+    <form method="GET" action="button.php">
+    <label for="tri">Trier nombre de monuments :</label>
+    <select name="tri" id="tri">
+        <option value="asc">Ascendant</option>
+        <option value="desc">Descendant</option>
+    </select>
+    <button type="submit">Trier</button>
+</form>
+<a href="PDFPays.php" target="_blank">Generate PDF</a>
+    <table border="1" align="center">
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col"> type</th>
-          <th scope="col"> destination</th>
-          <th scope="col">dateDepart</th>
-          <th scope="col">dateRetour</th>
-          <th scope="col">image</th>
-          <th scope="col">action</th>
+            <th>ID_pays</th>
+            <th>NomP</th>
+            <th>Capital</th>
+            <th>monuments</th>
+            <th>Update</th>
+            <th>Delete</th>
+            
         </tr>
-      </thead>
-      <tbody>
-      <?php
-    foreach ($tab as $Voyage){
-    ?>
-       <tr>
-         <td><?php echo $Voyage["id"] ?></td>
-         <td><?php echo $Voyage["type"] ?></td>
-         <td><?php echo $Voyage["destination"] ?></td>
-         <td><?php echo $Voyage["dateDepart"] ?></td>
-         <td><?php echo $Voyage["dateRetour"] ?></td>
-         <td><img src="<?php echo $Voyage['image']; ?>" width="200px" height="70px"></td>
-
-        
-        
-         <td>
-              <a href="edit.php?id=<?php echo $Voyage["id"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
-              <a href="delete.php?id=<?php echo $Voyage["id"] ?>" class="link-dark"><i class="fa-solid fa-trash fs-5"></i></a>
+        <?php
+        foreach ($tab as $pays) {
+        ?>
+        <tr>
+            <td><?= $pays['ID_pays']; ?></td>
+            <td><?= $pays['NomP']; ?></td>
+            <td><?= $pays['Capital']; ?></td>
+            <td><?= $pays['monuments']; ?></td>
+            
+           
+            <td align="center">
+            <form method="POST" action="updatePays.php">
+    <button type="submit" name="update" class="update-button">
+        <img src="update.png" alt="Update" class="me-3" style="width: 70px; height: 60px;">
+    </button>
+    <input type="hidden" value="<?= $pays['ID_pays']; ?>" name="ID_pays">
+</form>
             </td>
-          </tr>
+            <td>
+            <a href="deletePays.php?ID_pays=<?= $pays['ID_pays']; ?>" class="delete-link">
+    <h5 class="text-primary">
+        <img src="TRASH.png" alt="Trash" class="me-3" style="width: 70px; height: 60px;">
+    </h5>
+</a>
+            </td>
+           
+        </tr>
         <?php
         }
         ?>
-      </tbody>
+        
     </table>
-  </div>
-
-  <!-- Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-
-
-
-
-
+   
+<!-- More main website code... -->
             <!-- Button End -->
 
 
             <!-- Footer Start -->
-            
+            <form class="d-none d-md-flex ms-4" method="GET" action="button.php">
+    <input class="form-control border-0" type="search" name="NomP" placeholder="Saisir le nom du pays">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<?php
+// Check if the form has been submitted
+if (isset($_GET['NomP'])) {
+    // Sanitize the input to prevent SQL injection
+    $NomP = htmlspecialchars($_GET['NomP']);
+
+    // Assuming functions is your class for database operations
+    $functions = new functions();
+
+    // Use prepared statements for better security
+    $result = $functions->searchPays($NomP);
+
+    // Display results only if there are any
+    if ($result) {
+?>
+        <table border="1" align="center">
+            <tr>
+                <th>ID_pays</th>
+                <th>NomP</th>
+                <th>Capital</th>
+                <th>monuments</th>
+            </tr>
+<?php
+        foreach ($result as $pays) {
+?>
+            <tr>
+                <td><?= ($pays['ID_pays']); ?></td>
+                <td><?= ($pays['NomP']); ?></td>
+                <td><?= ($pays['Capital']); ?></td>
+                <td><?= ($pays['monuments']); ?></td>
+            </tr>
+<?php
+        }
+?>
+        </table>
+<?php
+    } else {
+        echo "<p>ce pays n'existe pas.</p>";
+    }
+}
+?>
+   <?php
+$result = $c->getguides();
+
+// Obtenez les labels et les données de réservation
+$labels = $result['labels'];
+$data = $result['data'];
+?>
+<div style="width: 50%">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+  
+    // Préparer les données pour le graphique
+    var labels = <?php echo json_encode($labels); ?>;
+    var data = <?php echo json_encode($data); ?>;
+
+    // Créer le graphique circulaire
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Nombre de guides par pays',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            aspectRatio: 1, // Pour s'assurer que le graphique est un cercle
+            scales: {
+                y: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">VieExplore.com</a>, All Right Reserved. 
+                        </div>
+                        
+                        <title>Recherche des pays</title>
+</head>
+<body>
+   
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Footer End -->
-     
+        </div>
         <!-- Content End -->
 
 
@@ -259,16 +522,16 @@ $tab = $voyage->listeVoyage();
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="lib1/chart/chart.min.js"></script>
+    <script src="lib1/easing/easing.min.js"></script>
+    <script src="lib1/waypoints/waypoints.min.js"></script>
+    <script src="lib1/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib1/tempusdominus/js/moment.min.js"></script>
+    <script src="lib1/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib1/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="js1/main.js"></script>
 </body>
 
 </html>
